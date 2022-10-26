@@ -6,7 +6,7 @@ import com.kay.todopublish.ui.theme.LowPriorityColor
 import com.kay.todopublish.ui.theme.MediumPriorityColor
 import com.kay.todopublish.ui.theme.NonePriorityColor
 
-enum class Priority (val color: Color){
+enum class Priority(val color: Color) {
     HIGH(HighPriorityColor),
     MEDIUM(MediumPriorityColor),
     LOW(LowPriorityColor),

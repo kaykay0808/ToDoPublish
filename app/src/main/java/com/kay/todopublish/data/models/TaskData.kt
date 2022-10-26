@@ -4,7 +4,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.kay.todopublish.util.Constants
 
-
 @Entity(tableName = Constants.DATABASE_TABLE)
 data class TaskData(
     @PrimaryKey(autoGenerate = true)
