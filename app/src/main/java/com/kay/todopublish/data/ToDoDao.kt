@@ -1,5 +1,6 @@
 package com.kay.todopublish.data
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -8,6 +9,9 @@ import androidx.room.Update
 import com.kay.todopublish.data.models.TaskData
 import kotlinx.coroutines.flow.Flow
 
+// https://www.w3schools.com/sql/
+
+@Dao
 interface ToDoDao {
     // Inserting the data
     @Insert(onConflict = OnConflictStrategy.IGNORE)
