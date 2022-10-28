@@ -2,10 +2,12 @@ package com.kay.todopublish.data.repository
 
 import com.kay.todopublish.data.ToDoDao
 import com.kay.todopublish.data.models.TaskData
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class ToDoRepository @Inject constructor(private val toDoDao: ToDoDao){
+@ViewModelScoped
+class ToDoRepository @Inject constructor(private val toDoDao: ToDoDao) {
     // access all functions from Dao
     val getAllTask: Flow<List<TaskData>> = toDoDao.getAllTask()
     val sortByLowPriority: Flow<List<TaskData>> = toDoDao.sortByLowPriority()

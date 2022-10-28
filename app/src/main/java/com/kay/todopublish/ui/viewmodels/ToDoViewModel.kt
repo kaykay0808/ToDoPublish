@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class ToDoViewModel @Inject constructor(
     private val repository: ToDoRepository
-) : ViewModel(){
+) : ViewModel() {
 
     // Get All Task
     private val _allTask = MutableStateFlow<List<TaskData>>(emptyList())
