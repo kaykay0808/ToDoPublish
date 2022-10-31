@@ -17,21 +17,20 @@ fun NavigationSetup(
 ) {
     // save our backstack
     // The variable just keep track of all our composable
-    val screen = remember(navController) {
+    val screenDestination = remember(navController) {
         ScreenController(navController = navController)
     }
-
     // Calling the navHost which define the navigation graph.
     NavHost(
         navController = navController,
-        startDestination = LIST_SCREEN
+        startDestination = LIST_SCREEN // -> list/{action}
     ) {
         // Define our composable build (we will create our custom destination instead of define our composable below)
         listComposable(
-            navigateToTaskScreen = screen.task
+            navigateToTaskScreen = screenDestination.task
         )
         taskComposable(
-            navigateToListScreen = screen.list
+            navigateToListScreen = screenDestination.list
         )
     }
 }

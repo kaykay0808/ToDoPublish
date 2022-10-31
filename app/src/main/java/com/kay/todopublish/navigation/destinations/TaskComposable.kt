@@ -8,10 +8,12 @@ import com.kay.todopublish.util.Action
 import com.kay.todopublish.util.Constants
 import com.kay.todopublish.util.Constants.TASK_SCREEN
 
+//
 fun NavGraphBuilder.taskComposable(
     navigateToListScreen: (Action) -> Unit
 ) {
     composable(
+        // specify what argument the screen will have
         route = TASK_SCREEN,
         arguments = listOf(
             navArgument(Constants.TASK_ARGUMENT_KEY) {
