@@ -11,11 +11,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.kay.todopublish.R
+import com.kay.todopublish.ui.screens.list.topbar.ListAppBar
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ListScreen(navigateToTaskScreen: (Int) -> Unit) {
     Scaffold(
+        topBar = { ListAppBar() },
         content = {},
         floatingActionButton = {
             ListFloatingActionButton(onFloatingActionButtonClicked = navigateToTaskScreen)
