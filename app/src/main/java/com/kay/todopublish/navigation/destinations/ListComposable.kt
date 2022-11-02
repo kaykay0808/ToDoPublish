@@ -10,7 +10,7 @@ import com.kay.todopublish.util.Constants.LIST_SCREEN
 
 // extension function listComposable
 fun NavGraphBuilder.listComposable(
-    navigateToTaskScreen: (Int) -> Unit
+    navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
     composable(
         route = LIST_SCREEN,
