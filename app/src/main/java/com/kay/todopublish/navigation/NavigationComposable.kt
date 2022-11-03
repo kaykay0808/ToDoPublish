@@ -1,19 +1,23 @@
 package com.kay.todopublish.navigation
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.kay.todopublish.navigation.destinations.listComposable
 import com.kay.todopublish.navigation.destinations.taskComposable
+import com.kay.todopublish.ui.viewmodels.ToDoViewModel
 import com.kay.todopublish.util.Constants.LIST_SCREEN
 
 // Settings for our navigation
+@OptIn(ExperimentalAnimationApi::class)
 @SuppressLint("RememberReturnType")
 @Composable
 fun NavigationSetup(
-    navController: NavHostController
+    navController: NavHostController,
+    toDoViewModel: ToDoViewModel
 ) {
     // save our backstack
     // The variable just keep track of all our composable
@@ -27,7 +31,8 @@ fun NavigationSetup(
     ) {
         // Define our composable build (we will create our custom destination instead of define our composable below)
         listComposable(
-            navigateToTaskScreen = screenDestination.task
+            navigateToTaskScreen = screenDestination.task,
+            toDoViewModel = toDoViewModel
         )
         taskComposable(
             navigateToListScreen = screenDestination.list

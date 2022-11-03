@@ -7,6 +7,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
@@ -17,23 +18,49 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.kay.todopublish.R
 import com.kay.todopublish.components.PriorityItem
 import com.kay.todopublish.data.models.Priority
 import com.kay.todopublish.ui.theme.LARGE_PADDING
 import com.kay.todopublish.ui.theme.Typography
+import com.kay.todopublish.ui.theme.topAppBarBackgroundColor
 import com.kay.todopublish.ui.theme.topAppBarContentColor
 
 @Composable
-fun ListAppBarActions(
-    onSearchClicked: () -> Unit,
-    onSortClicked: (Priority) -> Unit,
-    onDeleteClicked: () -> Unit
+fun DefaultListAppBar(
+    onSearchIconClicked: () -> Unit,
+    onSortIconClicked: (Priority) -> Unit,
+    onDeleteIconClicked: () -> Unit
+) {
+    TopAppBar(
+        title = {
+            Text(
+                text = stringResource(id = R.string.task),
+                color = MaterialTheme.colors.topAppBarContentColor
+            )
+        },
+        actions = {
+            DefaultBarActions(
+                onSearchIconClicked = onSearchIconClicked,
+                onSortIconClicked = onSortIconClicked,
+                onDeleteIconClicked = onDeleteIconClicked
+            )
+        },
+        backgroundColor = MaterialTheme.colors.topAppBarBackgroundColor
+    )
+}
+
+@Composable
+fun DefaultBarActions(
+    onSearchIconClicked: () -> Unit,
+    onSortIconClicked: (Priority) -> Unit,
+    onDeleteIconClicked: () -> Unit
 ) {
     // Calling our 3 action functions which we Define in our 3 different functions
-    SearchAction(onSearchClicked = onSearchClicked)
-    SortAction(onSortClicked = onSortClicked)
-    DeleteAllAction(onDeleteClicked = onDeleteClicked)
+    SearchAction(onSearchIconClicked = onSearchIconClicked)
+    SortAction(onSortIconClicked = onSortIconClicked)
+    DeleteAllAction(onDeleteIconClicked = onDeleteIconClicked)
 }
 
 // Actions.
@@ -41,11 +68,11 @@ fun ListAppBarActions(
 // action 1
 @Composable
 fun SearchAction(
-    onSearchClicked: () -> Unit
+    onSearchIconClicked: () -> Unit
 ) {
     // Define an Icon for the action
     IconButton(
-        onClick = { onSearchClicked() }
+        onClick = { onSearchIconClicked() }
     ) { // define the icon appearance
         Icon(
             imageVector = Icons.Filled.Search,
@@ -58,7 +85,7 @@ fun SearchAction(
 // action 2
 @Composable
 fun SortAction(
-    onSortClicked: (Priority) -> Unit
+    onSortIconClicked: (Priority) -> Unit
 ) {
     var expandedDropDownMenu by remember { mutableStateOf(false) }
 
@@ -79,7 +106,7 @@ fun SortAction(
             DropdownMenuItem(
                 onClick = {
                     expandedDropDownMenu = false
-                    onSortClicked(Priority.LOW)
+                    onSortIconClicked(Priority.LOW)
                 }
             ) {
                 // Defining the row item
@@ -90,7 +117,7 @@ fun SortAction(
             DropdownMenuItem(
                 onClick = {
                     expandedDropDownMenu = false
-                    onSortClicked(Priority.HIGH)
+                    onSortIconClicked(Priority.HIGH)
                 }
             ) {
                 // Defining the row item
@@ -101,7 +128,7 @@ fun SortAction(
             DropdownMenuItem(
                 onClick = {
                     expandedDropDownMenu = false
-                    onSortClicked(Priority.NONE)
+                    onSortIconClicked(Priority.NONE)
                 }
             ) {
                 // Defining the row item
@@ -113,7 +140,7 @@ fun SortAction(
 
 // action 3
 @Composable
-fun DeleteAllAction(onDeleteClicked: () -> Unit) {
+fun DeleteAllAction(onDeleteIconClicked: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     IconButton(
@@ -131,7 +158,7 @@ fun DeleteAllAction(onDeleteClicked: () -> Unit) {
             DropdownMenuItem(
                 onClick = {
                     expanded = false
-                    onDeleteClicked()
+                    onDeleteIconClicked()
                 }
             ) {
                 Text(
@@ -142,4 +169,14 @@ fun DeleteAllAction(onDeleteClicked: () -> Unit) {
             }
         }
     }
+}
+
+@Composable
+@Preview
+fun DefaultAppBarPreview() {
+    DefaultListAppBar(
+        onSearchIconClicked = {},
+        onSortIconClicked = {},
+        onDeleteIconClicked = {}
+    )
 }
