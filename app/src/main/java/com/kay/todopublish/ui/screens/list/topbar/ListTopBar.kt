@@ -8,7 +8,7 @@ import com.kay.todopublish.util.SearchAppBarState
 fun ListTopBar(
     viewState: ToDoViewState,
     onSearchIconClicked: () -> Unit,
-    onCloseClicked: () -> Unit,
+    onCloseIconClicked: () -> Unit,
     onSearchTextChange: (String) -> Unit,
     // toDoViewModel: ToDoViewModel,
     // searchAppBarState: SearchAppBarState,
@@ -26,9 +26,7 @@ fun ListTopBar(
             SearchAppBar(
                 textSearchInput = viewState.searchTextInputState,
                 onSearchTextChange = onSearchTextChange,
-                // { onNewTextEdit -> toDoViewModel.newInputTextChange(newInputVal = onNewTextEdit) }
-                onCloseClicked = onCloseClicked,
-                // { toDoViewModel.closeSearchBar(), toDoViewModel.defaultTextInputState() }
+                onCloseIconClicked = onCloseIconClicked,
                 onSearchClicked = {}
             )
         }

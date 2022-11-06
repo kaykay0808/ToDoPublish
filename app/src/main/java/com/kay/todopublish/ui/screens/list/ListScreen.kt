@@ -8,7 +8,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,23 +23,16 @@ fun ListScreen(
     navigateToTaskScreen: (taskId: Int) -> Unit,
     viewState: ToDoViewState,
     onSearchIconClicked: () -> Unit,
-    onCloseClicked: () -> Unit,
+    onCloseIconClicked: () -> Unit,
     onSearchTextChange: (String) -> Unit
-    // toDoViewModel: ToDoViewModel,
 ) {
-
-    // val searchAppBarState: SearchAppBarState by toDoViewModel.searchAppBarState
-    // val searchTextState: String by toDoViewModel.searchTextState
     Scaffold(
         topBar = {
             ListTopBar(
                 onSearchIconClicked = onSearchIconClicked,
-                onCloseClicked = onCloseClicked,
+                onCloseIconClicked = onCloseIconClicked,
                 viewState = viewState,
                 onSearchTextChange = onSearchTextChange,
-                // toDoViewModel = toDoViewModel,
-                // searchAppBarState = searchAppBarState,
-                // searchTextState = searchTextState,
             )
         },
         content = {},
@@ -59,7 +51,6 @@ fun ListFloatingActionButton(onFloatingActionButtonClicked: (taskId: Int) -> Uni
         },
         backgroundColor = MaterialTheme.colors.floatingActionButtonBackgroundColor
     ) {
-        // Add an icon to our floating action button
         Icon(
             imageVector = Icons.Filled.Add,
             contentDescription = stringResource(id = R.string.add_button),
@@ -76,6 +67,6 @@ private fun ListScreenPreview() {
         viewState = ToDoViewState(SearchAppBarState.CLOSED),
         onSearchIconClicked = {},
         onSearchTextChange = {},
-        onCloseClicked = {},
+        onCloseIconClicked = {},
     )
 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.data.repository.ToDoRepository
+import com.kay.todopublish.util.CloseIconState
 import com.kay.todopublish.util.SearchAppBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,11 +25,13 @@ class ToDoViewModel @Inject constructor(
 
     private var searchAppBarState = SearchAppBarState.CLOSED
     private var searchTextInputState = ""
+    private var closeIconState = CloseIconState.READY_TO_EMPTY_FIELD
 
     private fun render() {
         viewState = ToDoViewState(
             searchAppBarState = searchAppBarState,
-            searchTextInputState = searchTextInputState
+            searchTextInputState = searchTextInputState,
+            closeIconState = closeIconState
         )
     }
 
@@ -48,10 +51,21 @@ class ToDoViewModel @Inject constructor(
 
     fun defaultTextInputState() {
         searchTextInputState = ""
+        render()
     }
 
     fun newInputTextChange(newInputVal: String) {
         searchTextInputState = newInputVal
+        render()
+    }
+
+    fun readyToEmptyField() {
+        closeIconState = CloseIconState.READY_TO_EMPTY_FIELD
+        render()
+    }
+
+    fun readyToCloseSearchBar() {
+        closeIconState = CloseIconState.READY_TO_CLOSE_SEARCH_BAR
         render()
     }
 

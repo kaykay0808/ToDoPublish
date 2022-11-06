@@ -31,8 +31,9 @@ import com.kay.todopublish.ui.theme.topAppBarContentColor
 fun SearchAppBar(
     textSearchInput: String,
     onSearchTextChange: (String) -> Unit,
-    onCloseClicked: () -> Unit,
-    onSearchClicked: (String) -> Unit // ?
+    onCloseIconClicked: () -> Unit,
+    onSearchClicked: (String) -> Unit, // ?
+    // viewState: ToDoViewState,
 ) {
     Surface(
         modifier = Modifier
@@ -73,7 +74,7 @@ fun SearchAppBar(
             },
             trailingIcon = {
                 IconButton(
-                    onClick = { onCloseClicked() }
+                    onClick = onCloseIconClicked
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Close,
@@ -101,7 +102,7 @@ private fun SearchAppBarPreview() {
     SearchAppBar(
         textSearchInput = "",
         onSearchTextChange = {},
-        onCloseClicked = {},
+        onCloseIconClicked = {},
         onSearchClicked = {}
     )
 }
