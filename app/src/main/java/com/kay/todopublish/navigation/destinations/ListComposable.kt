@@ -22,9 +22,19 @@ fun NavGraphBuilder.listComposable(
             }
         )
     ) {
+        val viewState = toDoViewModel.viewState
         ListScreen(
             navigateToTaskScreen = navigateToTaskScreen,
-            toDoViewModel = toDoViewModel
+            // toDoViewModel = toDoViewModel,
+            viewState = viewState,
+            onSearchIconClicked = { toDoViewModel.openSearchBar() },
+            onCloseClicked = {
+                toDoViewModel.closeSearchBar()
+                toDoViewModel.defaultTextInputState()
+            },
+            onSearchTextChange = { onNewTextEdit ->
+                toDoViewModel.newInputTextChange(onNewTextEdit)
+            }
         )
     }
 }

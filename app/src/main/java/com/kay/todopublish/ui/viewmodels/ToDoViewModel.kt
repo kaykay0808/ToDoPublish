@@ -1,7 +1,8 @@
 package com.kay.todopublish.ui.viewmodels
 
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kay.todopublish.data.models.TaskData
@@ -17,11 +18,42 @@ import javax.inject.Inject
 class ToDoViewModel @Inject constructor(
     private val repository: ToDoRepository
 ) : ViewModel() {
+    /** ============ Search Bar State ================= */
+    var viewState by mutableStateOf(ToDoViewState())
+        private set
 
-    // Search Bar State
-    val searchAppBarState: MutableState<SearchAppBarState> =
-        mutableStateOf(SearchAppBarState.CLOSED)
-    val searchTextState: MutableState<String> = mutableStateOf("")
+    private var searchAppBarState = SearchAppBarState.CLOSED
+    private var searchTextInputState = ""
+
+    private fun render() {
+        viewState = ToDoViewState(
+            searchAppBarState = searchAppBarState,
+            searchTextInputState = searchTextInputState
+        )
+    }
+
+    /*val searchAppBarState: MutableState<SearchAppBarState> =
+        mutableStateOf(SearchAppBarState.CLOSED)*/
+    // val searchTextState: MutableState<String> = mutableStateOf("")
+
+    fun openSearchBar() {
+        searchAppBarState = SearchAppBarState.OPENED
+        render()
+    }
+
+    fun closeSearchBar() {
+        searchAppBarState = SearchAppBarState.CLOSED
+        render()
+    }
+
+    fun defaultTextInputState() {
+        searchTextInputState = ""
+    }
+
+    fun newInputTextChange(newInputVal: String) {
+        searchTextInputState = newInputVal
+        render()
+    }
 
     // Get All Task
     private val _allTask = MutableStateFlow<List<TaskData>>(emptyList())

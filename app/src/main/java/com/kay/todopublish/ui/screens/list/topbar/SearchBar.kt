@@ -30,7 +30,7 @@ import com.kay.todopublish.ui.theme.topAppBarContentColor
 @Composable
 fun SearchAppBar(
     textSearchInput: String,
-    onTextChange: (String) -> Unit,
+    onSearchTextChange: (String) -> Unit,
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit // ?
 ) {
@@ -43,7 +43,7 @@ fun SearchAppBar(
     ) {
         TextField(
             value = textSearchInput,
-            onValueChange = { onTextChange(it) },
+            onValueChange = { onSearchTextChange(it) },
             placeholder = {
                 Text(
                     modifier = Modifier
@@ -58,7 +58,6 @@ fun SearchAppBar(
             ),
             // everything we type in textField will be in a single line.
             singleLine = true,
-            // start Icon
             leadingIcon = {
                 IconButton(
                     // opacity for the icon
@@ -72,7 +71,6 @@ fun SearchAppBar(
                     )
                 }
             },
-            // the ending icon of the text field
             trailingIcon = {
                 IconButton(
                     onClick = { onCloseClicked() }
@@ -102,7 +100,7 @@ fun SearchAppBar(
 private fun SearchAppBarPreview() {
     SearchAppBar(
         textSearchInput = "",
-        onTextChange = {},
+        onSearchTextChange = {},
         onCloseClicked = {},
         onSearchClicked = {}
     )

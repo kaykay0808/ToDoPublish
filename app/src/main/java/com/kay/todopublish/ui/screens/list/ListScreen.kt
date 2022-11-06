@@ -11,26 +11,36 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.kay.todopublish.R
 import com.kay.todopublish.ui.screens.list.topbar.ListTopBar
 import com.kay.todopublish.ui.theme.floatingActionButtonBackgroundColor
-import com.kay.todopublish.ui.viewmodels.ToDoViewModel
+import com.kay.todopublish.ui.viewmodels.ToDoViewState
 import com.kay.todopublish.util.SearchAppBarState
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ListScreen(
     navigateToTaskScreen: (taskId: Int) -> Unit,
-    toDoViewModel: ToDoViewModel
+    viewState: ToDoViewState,
+    onSearchIconClicked: () -> Unit,
+    onCloseClicked: () -> Unit,
+    onSearchTextChange: (String) -> Unit
+    // toDoViewModel: ToDoViewModel,
 ) {
-    val searchAppBarState: SearchAppBarState by toDoViewModel.searchAppBarState
-    val searchTextState: String by toDoViewModel.searchTextState
+
+    // val searchAppBarState: SearchAppBarState by toDoViewModel.searchAppBarState
+    // val searchTextState: String by toDoViewModel.searchTextState
     Scaffold(
         topBar = {
             ListTopBar(
-                toDoViewModel = toDoViewModel,
-                searchAppBarState = searchAppBarState,
-                searchTextState = searchTextState,
+                onSearchIconClicked = onSearchIconClicked,
+                onCloseClicked = onCloseClicked,
+                viewState = viewState,
+                onSearchTextChange = onSearchTextChange,
+                // toDoViewModel = toDoViewModel,
+                // searchAppBarState = searchAppBarState,
+                // searchTextState = searchTextState,
             )
         },
         content = {},
@@ -58,11 +68,14 @@ fun ListFloatingActionButton(onFloatingActionButtonClicked: (taskId: Int) -> Uni
     }
 }
 
-/*@Composable
+@Composable
 @Preview
 private fun ListScreenPreview() {
     ListScreen(
         navigateToTaskScreen = {},
-
+        viewState = ToDoViewState(SearchAppBarState.CLOSED),
+        onSearchIconClicked = {},
+        onSearchTextChange = {},
+        onCloseClicked = {},
     )
-}*/
+}
