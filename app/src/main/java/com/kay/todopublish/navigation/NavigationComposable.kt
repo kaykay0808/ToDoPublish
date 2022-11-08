@@ -1,7 +1,6 @@
 package com.kay.todopublish.navigation
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
@@ -12,7 +11,6 @@ import com.kay.todopublish.ui.viewmodels.ToDoViewModel
 import com.kay.todopublish.util.Constants.LIST_SCREEN
 
 // Settings for our navigation
-@OptIn(ExperimentalAnimationApi::class)
 @SuppressLint("RememberReturnType")
 @Composable
 fun NavigationSetup(

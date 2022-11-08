@@ -35,7 +35,7 @@ fun ListScreen(
                 onSearchTextChange = onSearchTextChange,
             )
         },
-        content = {},
+        content = { ListContent() },
         floatingActionButton = {
             ListFloatingActionButton(onFloatingActionButtonClicked = navigateToTaskScreen)
         }

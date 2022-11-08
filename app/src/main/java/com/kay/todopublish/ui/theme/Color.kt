@@ -21,10 +21,16 @@ val MediumGray = Color(0xFF9C9C9C)
 val DarkGray = Color(0xFF141414)
 
 // Declare extension properties
-val Colors.floatingActionButtonBackgroundColor: Color
+/** -- TASK ITEM -- */
+val Colors.taskItemTextColor: Color
     @Composable
-    get() = if (isLight) Teal200 else Purple700
+    get() = if (isLight) DarkGray else LightGray
 
+val Colors.taskItemBackgroundColor: Color
+    @Composable
+    get() = if (isLight) Color.White else DarkGray
+
+/** -- TOP BAR -- */
 val Colors.topAppBarContentColor: Color
     @Composable
     get() = if (isLight) Color.White else LightGray
@@ -32,3 +38,8 @@ val Colors.topAppBarContentColor: Color
 val Colors.topAppBarBackgroundColor: Color
     @Composable
     get() = if (isLight) Purple500 else Color.Black
+
+/** -- FLOATING ACTION BUTTON -- */
+val Colors.floatingActionButtonBackgroundColor: Color
+    @Composable
+    get() = if (isLight) Teal200 else Purple700

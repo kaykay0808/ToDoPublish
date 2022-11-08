@@ -4,8 +4,8 @@ import androidx.navigation.NavHostController
 import com.kay.todopublish.util.Action
 import com.kay.todopublish.util.Constants.LIST_SCREEN
 
+// Class which handle our navigation
 class ScreenController(navController: NavHostController) {
-
     /** LIST-SCREEN TO TASK-SCREEN  (List route?)*/
     val task: (Int) -> Unit = { taskId ->
         navController.navigate("task/$taskId") // <- pass in our constants later

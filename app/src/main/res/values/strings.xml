@@ -7,4 +7,6 @@
     <string name="delete_all_action">Delete All</string>
     <string name="search_action">Search Task</string>
     <string name="sort_action">Sort Tasks</string>
+    <!-- Search App Bar -->
+    <string name="search_input_placeholder">Search</string>
 </resources>

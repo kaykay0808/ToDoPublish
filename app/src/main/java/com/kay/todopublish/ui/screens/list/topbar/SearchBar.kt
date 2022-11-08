@@ -20,9 +20,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
+import com.kay.todopublish.R
 import com.kay.todopublish.ui.theme.TOP_APP_BAR_HEIGHT
 import com.kay.todopublish.ui.theme.topAppBarBackgroundColor
 import com.kay.todopublish.ui.theme.topAppBarContentColor
@@ -49,7 +51,7 @@ fun SearchAppBar(
                 Text(
                     modifier = Modifier
                         .alpha(ContentAlpha.medium),
-                    text = "Search",
+                    text = stringResource(id = R.string.search_input_placeholder),
                     color = Color.White
                 )
             },
