@@ -7,7 +7,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.kay.todopublish.navigation.destinations.listComposable
 import com.kay.todopublish.navigation.destinations.taskComposable
-import com.kay.todopublish.ui.viewmodels.ToDoViewModel
 import com.kay.todopublish.util.Constants.LIST_SCREEN
 
 // Settings for our navigation
@@ -15,7 +14,7 @@ import com.kay.todopublish.util.Constants.LIST_SCREEN
 @Composable
 fun NavigationSetup(
     navController: NavHostController,
-    toDoViewModel: ToDoViewModel
+    // toDoViewModel: ToDoViewModel
 ) {
     // save our backstack
     // The variable just keep track of all our composable
@@ -30,7 +29,7 @@ fun NavigationSetup(
         // Define our composable build (we will create our custom destination instead of define our composable below)
         listComposable(
             navigateToTaskScreen = screenDestination.task,
-            toDoViewModel = toDoViewModel
+            // toDoViewModel = toDoViewModel
         )
         taskComposable(
             navigateToListScreen = screenDestination.list

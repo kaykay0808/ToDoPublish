@@ -34,7 +34,7 @@ fun SearchAppBar(
     textSearchInput: String,
     onSearchTextChange: (String) -> Unit,
     onCloseIconClicked: () -> Unit,
-    onSearchClicked: (String) -> Unit, // ?
+    onSearchClicked: (String) -> Unit, // When we actually search something (on the app keyboard)
     // viewState: ToDoViewState,
 ) {
     Surface(
@@ -69,7 +69,7 @@ fun SearchAppBar(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Search,
-                        contentDescription = "Search Icon",
+                        contentDescription = stringResource(id = R.string.search_icon),
                         tint = MaterialTheme.colors.topAppBarContentColor
                     )
                 }
@@ -80,7 +80,7 @@ fun SearchAppBar(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Close,
-                        contentDescription = "Exit search bar",
+                        contentDescription = stringResource(id = R.string.close_icon),
                         tint = MaterialTheme.colors.topAppBarContentColor
                     )
                 }

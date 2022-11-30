@@ -1,5 +1,7 @@
 package com.kay.todopublish.navigation.destinations
 
+import android.util.Log
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
@@ -13,7 +15,6 @@ import com.kay.todopublish.util.Constants.LIST_SCREEN
 // extension function listComposable
 fun NavGraphBuilder.listComposable(
     navigateToTaskScreen: (taskId: Int) -> Unit,
-    toDoViewModel: ToDoViewModel
 ) {
     composable(
         route = LIST_SCREEN,
@@ -23,10 +24,16 @@ fun NavGraphBuilder.listComposable(
             }
         )
     ) {
+        val toDoViewModel: ToDoViewModel = hiltViewModel()
         val viewState = toDoViewModel.viewState
+        val allTask = viewState.allTask
+        // Testing
+        for (task in allTask) {
+            Log.d("ListScreen", task.title)
+        }
+
         ListScreen(
             navigateToTaskScreen = navigateToTaskScreen,
-            // toDoViewModel = toDoViewModel,
             viewState = viewState,
             onSearchIconClicked = { toDoViewModel.openSearchBar() },
             onCloseIconClicked = {
@@ -49,7 +56,8 @@ fun NavGraphBuilder.listComposable(
             },
             onSearchTextChange = { onNewTextEdit ->
                 toDoViewModel.newInputTextChange(onNewTextEdit)
-            }
+            },
+            task = allTask
         )
     }
 }

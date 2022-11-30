@@ -10,8 +10,6 @@ import com.kay.todopublish.data.repository.ToDoRepository
 import com.kay.todopublish.util.CloseIconState
 import com.kay.todopublish.util.SearchAppBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,6 +17,11 @@ import javax.inject.Inject
 class ToDoViewModel @Inject constructor(
     private val repository: ToDoRepository
 ) : ViewModel() {
+
+    init {
+        getAllTask()
+    }
+
     /** ============ Search Bar State ================= */
     var viewState by mutableStateOf(ToDoViewState())
         private set
@@ -26,12 +29,16 @@ class ToDoViewModel @Inject constructor(
     private var searchAppBarState = SearchAppBarState.CLOSED
     private var searchTextInputState = ""
     private var closeIconState = CloseIconState.READY_TO_EMPTY_FIELD
+    // TODO get all task
+    private var allTask = emptyList<TaskData>()
 
     private fun render() {
         viewState = ToDoViewState(
             searchAppBarState = searchAppBarState,
             searchTextInputState = searchTextInputState,
-            closeIconState = closeIconState
+            closeIconState = closeIconState,
+            // TODO get all task
+            allTask = allTask
         )
     }
 
@@ -70,12 +77,13 @@ class ToDoViewModel @Inject constructor(
     }
 
     // Get All Task
-    private val _allTask = MutableStateFlow<List<TaskData>>(emptyList())
-    val allTask: StateFlow<List<TaskData>> = _allTask
-    fun getAllTask() {
+    // private val _allTask = List<TaskData>(emptyList())
+    // val allTask: StateFlow<List<TaskData>> = _allTask
+    private fun getAllTask() {
         viewModelScope.launch {
             repository.getAllTask.collect {
-                _allTask.value = it
+                allTask = it
+                render()
             }
         }
     }

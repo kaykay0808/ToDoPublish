@@ -2,6 +2,9 @@
     <string name="app_name">ToDoPublish</string>
     <string name="add_button">Add Button</string>
 
+    <!-- List Screen -->
+    <string name="empty_content">No Task Found</string>
+
     <!-- Default App Bar -->
     <string name="task">Task</string>
     <string name="delete_all_action">Delete All</string>
@@ -9,4 +12,8 @@
     <string name="sort_action">Sort Tasks</string>
     <!-- Search App Bar -->
     <string name="search_input_placeholder">Search</string>
+    <!-- Icon description -->
+    <string name="close_icon">Close Icon</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="sad_face_icon">Sad Face Icon</string>
 </resources>
