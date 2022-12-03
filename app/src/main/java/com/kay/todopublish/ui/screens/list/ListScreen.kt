@@ -15,6 +15,7 @@ import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.ui.screens.list.topbar.ListTopBar
 import com.kay.todopublish.ui.theme.floatingActionButtonBackgroundColor
 import com.kay.todopublish.ui.viewmodels.ToDoViewState
+import com.kay.todopublish.util.RequestState
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -25,7 +26,7 @@ fun ListScreen(
     onCloseIconClicked: () -> Unit,
     onSearchTextChange: (String) -> Unit,
     // toDoViewModel: ToDoViewModel,
-    task: List<TaskData>
+    task: RequestState<List<TaskData>>
 ) {
     // LaunchedEffect(key1 = true) { toDoViewModel.getAllTask() }
     // val allTask by sharedViewModel.allTask.collectAsState()

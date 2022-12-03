@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.data.repository.ToDoRepository
 import com.kay.todopublish.util.CloseIconState
+import com.kay.todopublish.util.RequestState
 import com.kay.todopublish.util.SearchAppBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -30,7 +31,7 @@ class ToDoViewModel @Inject constructor(
     private var searchTextInputState = ""
     private var closeIconState = CloseIconState.READY_TO_EMPTY_FIELD
     // TODO get all task
-    private var allTask = emptyList<TaskData>()
+    private var allTask: RequestState<List<TaskData>> = RequestState.Idle
 
     private fun render() {
         viewState = ToDoViewState(
@@ -80,11 +81,16 @@ class ToDoViewModel @Inject constructor(
     // private val _allTask = List<TaskData>(emptyList())
     // val allTask: StateFlow<List<TaskData>> = _allTask
     private fun getAllTask() {
-        viewModelScope.launch {
-            repository.getAllTask.collect {
-                allTask = it
-                render()
+        allTask = RequestState.Loading
+        try {
+            viewModelScope.launch {
+                repository.getAllTask.collect {
+                    allTask = RequestState.Success(it)
+                    render()
+                }
             }
+        } catch (e: Exception) {
+            allTask = RequestState.Error(e)
         }
     }
 }

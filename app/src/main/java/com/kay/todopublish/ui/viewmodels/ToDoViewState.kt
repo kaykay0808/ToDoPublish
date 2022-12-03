@@ -2,6 +2,7 @@ package com.kay.todopublish.ui.viewmodels
 
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.util.CloseIconState
+import com.kay.todopublish.util.RequestState
 import com.kay.todopublish.util.SearchAppBarState
 
 data class ToDoViewState(
@@ -10,5 +11,5 @@ data class ToDoViewState(
     val searchTextInputState: String = "",
     val closeIconState: CloseIconState = CloseIconState.READY_TO_EMPTY_FIELD,
     // Room
-    val allTask: List<TaskData> = emptyList()
+    val allTask: RequestState<List<TaskData>> = RequestState.Idle // List<TaskData> = emptyList()
 )

@@ -1,6 +1,5 @@
 package com.kay.todopublish.navigation.destinations
 
-import android.util.Log
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -27,10 +26,6 @@ fun NavGraphBuilder.listComposable(
         val toDoViewModel: ToDoViewModel = hiltViewModel()
         val viewState = toDoViewModel.viewState
         val allTask = viewState.allTask
-        // Testing
-        for (task in allTask) {
-            Log.d("ListScreen", task.title)
-        }
 
         ListScreen(
             navigateToTaskScreen = navigateToTaskScreen,
