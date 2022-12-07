@@ -6,7 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.kay.todopublish.ui.screens.list.ListScreen
-import com.kay.todopublish.ui.viewmodels.ToDoViewModel
+import com.kay.todopublish.ui.screens.list.viewmodel.ListViewModel
 import com.kay.todopublish.util.CloseIconState
 import com.kay.todopublish.util.Constants.LIST_ARGUMENT_KEY
 import com.kay.todopublish.util.Constants.LIST_SCREEN
@@ -23,26 +23,26 @@ fun NavGraphBuilder.listComposable(
             }
         )
     ) {
-        val toDoViewModel: ToDoViewModel = hiltViewModel()
-        val viewState = toDoViewModel.viewState
+        val listViewModel: ListViewModel = hiltViewModel()
+        val viewState = listViewModel.viewState
         val allTask = viewState.allTask
 
         ListScreen(
             navigateToTaskScreen = navigateToTaskScreen,
             viewState = viewState,
-            onSearchIconClicked = { toDoViewModel.openSearchBar() },
+            onSearchIconClicked = { listViewModel.openSearchBar() },
             onCloseIconClicked = {
                 when (viewState.closeIconState) {
                     CloseIconState.READY_TO_EMPTY_FIELD -> {
-                        toDoViewModel.defaultTextInputState() // Tømme
-                        toDoViewModel.readyToCloseSearchBar() // klar til å lukke searchBar
+                        listViewModel.defaultTextInputState() // Tømme
+                        listViewModel.readyToCloseSearchBar() // klar til å lukke searchBar
                     }
                     CloseIconState.READY_TO_CLOSE_SEARCH_BAR -> {
                         if (viewState.searchTextInputState.isNotEmpty()) {
-                            toDoViewModel.defaultTextInputState()
+                            listViewModel.defaultTextInputState()
                         } else {
-                            toDoViewModel.closeSearchBar()
-                            toDoViewModel.readyToEmptyField() // set back to READY_TO_EMPTY_FIELD
+                            listViewModel.closeSearchBar()
+                            listViewModel.readyToEmptyField() // set back to READY_TO_EMPTY_FIELD
                         }
                     }
                 }
@@ -50,7 +50,7 @@ fun NavGraphBuilder.listComposable(
                 // toDoViewModel.defaultTextInputState()
             },
             onSearchTextChange = { onNewTextEdit ->
-                toDoViewModel.newInputTextChange(onNewTextEdit)
+                listViewModel.newInputTextChange(onNewTextEdit)
             },
             task = allTask
         )

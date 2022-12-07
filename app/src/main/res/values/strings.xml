@@ -19,4 +19,6 @@
     <string name="back_arrow">Back Arrow"</string>
     <!-- Add Screen -->
     <string name="add_task">Add Task</string>
+    <string name="delete_icon">Delete Icon</string>
+    <string name="add_icon">Add Icon</string>
 </resources>

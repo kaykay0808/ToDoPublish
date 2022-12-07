@@ -1,11 +1,11 @@
-package com.kay.todopublish.ui.viewmodels
+package com.kay.todopublish.ui.screens.list.viewmodel
 
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.util.CloseIconState
 import com.kay.todopublish.util.RequestState
 import com.kay.todopublish.util.SearchAppBarState
 
-data class ToDoViewState(
+data class ListViewState(
     // Top bar
     val searchAppBarState: SearchAppBarState = SearchAppBarState.CLOSED,
     val searchTextInputState: String = "",

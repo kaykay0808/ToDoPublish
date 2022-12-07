@@ -1,4 +1,4 @@
-package com.kay.todopublish.ui.viewmodels
+package com.kay.todopublish.ui.screens.list.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,16 +15,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ToDoViewModel @Inject constructor(
+class ListViewModel @Inject constructor(
     private val repository: ToDoRepository
 ) : ViewModel() {
 
-    init {
-        getAllTask()
-    }
-
     /** ============ Search Bar State ================= */
-    var viewState by mutableStateOf(ToDoViewState())
+    var viewState by mutableStateOf(ListViewState())
         private set
 
     private var searchAppBarState = SearchAppBarState.CLOSED
@@ -33,8 +29,12 @@ class ToDoViewModel @Inject constructor(
     // TODO get all task
     private var allTask: RequestState<List<TaskData>> = RequestState.Idle
 
+    init {
+        getAllTask()
+    }
+
     private fun render() {
-        viewState = ToDoViewState(
+        viewState = ListViewState(
             searchAppBarState = searchAppBarState,
             searchTextInputState = searchTextInputState,
             closeIconState = closeIconState,
@@ -82,6 +82,7 @@ class ToDoViewModel @Inject constructor(
     // val allTask: StateFlow<List<TaskData>> = _allTask
     private fun getAllTask() {
         allTask = RequestState.Loading
+        render()
         try {
             viewModelScope.launch {
                 repository.getAllTask.collect {
@@ -91,6 +92,7 @@ class ToDoViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             allTask = RequestState.Error(e)
+            render()
         }
     }
 }

@@ -1,12 +1,12 @@
 package com.kay.todopublish.ui.screens.list.topbar
 
 import androidx.compose.runtime.Composable
-import com.kay.todopublish.ui.viewmodels.ToDoViewState
+import com.kay.todopublish.ui.screens.list.viewmodel.ListViewState
 import com.kay.todopublish.util.SearchAppBarState
 
 @Composable
 fun ListTopBar(
-    viewState: ToDoViewState,
+    viewState: ListViewState,
     onSearchIconClicked: () -> Unit,
     onCloseIconClicked: () -> Unit,
     onSearchTextChange: (String) -> Unit,

@@ -13,15 +13,15 @@ import androidx.compose.ui.res.stringResource
 import com.kay.todopublish.R
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.ui.screens.list.topbar.ListTopBar
+import com.kay.todopublish.ui.screens.list.viewmodel.ListViewState
 import com.kay.todopublish.ui.theme.floatingActionButtonBackgroundColor
-import com.kay.todopublish.ui.viewmodels.ToDoViewState
 import com.kay.todopublish.util.RequestState
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ListScreen(
     navigateToTaskScreen: (taskId: Int) -> Unit,
-    viewState: ToDoViewState,
+    viewState: ListViewState,
     onSearchIconClicked: () -> Unit,
     onCloseIconClicked: () -> Unit,
     onSearchTextChange: (String) -> Unit,
