@@ -32,7 +32,7 @@ fun ExistingTaskTopBar(
         },
         title = {
             Text(
-                text = stringResource(id = R.string.add_task),
+                text = selectedTask.title,
                 color = MaterialTheme.colors.topAppBarContentColor,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis /* Adds 3 dots */

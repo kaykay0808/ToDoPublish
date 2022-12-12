@@ -39,7 +39,7 @@ class ListViewModel @Inject constructor(
             searchTextInputState = searchTextInputState,
             closeIconState = closeIconState,
             // TODO get all task
-            allTask = allTask
+            allTask = allTask,
         )
     }
 

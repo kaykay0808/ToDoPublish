@@ -11,5 +11,5 @@ data class ListViewState(
     val searchTextInputState: String = "",
     val closeIconState: CloseIconState = CloseIconState.READY_TO_EMPTY_FIELD,
     // Room
-    val allTask: RequestState<List<TaskData>> = RequestState.Idle // List<TaskData> = emptyList()
+    val allTask: RequestState<List<TaskData>> = RequestState.Idle, // List<TaskData> = emptyList()
 )
