@@ -26,7 +26,6 @@ fun PriorityItem(priority: Priority) {
             text = priority.name,
             style = Typography.subtitle2,
             color = MaterialTheme.colors.onSurface
-
         )
     }
 }
