@@ -32,7 +32,7 @@ fun TaskContent(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize() // Takes the whole content in the Scaffold
             .background(MaterialTheme.colors.background)
             .padding(all = LARGE_PADDING)
     ) {

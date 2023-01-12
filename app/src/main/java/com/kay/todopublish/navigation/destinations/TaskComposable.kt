@@ -1,10 +1,13 @@
 package com.kay.todopublish.navigation.destinations
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.kay.todopublish.ui.screens.list.viewmodel.ListViewModel
 import com.kay.todopublish.ui.screens.task.TaskScreen
 import com.kay.todopublish.ui.screens.task.topbar.viewmodel.TaskViewModel
 import com.kay.todopublish.util.Action
@@ -22,20 +25,34 @@ fun NavGraphBuilder.taskComposable(
                 type = NavType.IntType
             }
         )
-    ) {
-        // val taskId = navBackStackEntry.arguments!!.getInt(TASK_ARGUMENT_KEY)
+    ) { navBackStackEntry ->
+        val taskId = navBackStackEntry.arguments!!.getInt(TASK_ARGUMENT_KEY)
 
+        // val listViewModel: ListViewModel = hiltViewModel()
         val taskViewModel: TaskViewModel = hiltViewModel()
-
-        /*LaunchedEffect(key1 = taskId) {
-            taskViewModel.getSelectedTask(taskId = taskId)
-        }*/
-        val taskViewState = taskViewModel.viewState
+        val taskViewState = taskViewModel.taskViewState
         val selectedTask = taskViewState.selectedTask
+        LaunchedEffect(key1 = taskId) {
+            taskViewModel.getSelectedTask(taskId = taskId)
+        }
 
-        TaskScreen(
-            selectedTask = selectedTask,
-            navigateToListScreen = navigateToListScreen
-        )
+        LaunchedEffect(key1 = selectedTask) {
+            if (selectedTask != null || taskId == -1) {
+                taskViewModel.updateTaskField(selectedTask = selectedTask)
+            }
+        }
+
+        if (selectedTask != null) {
+            TaskScreen(
+                selectedTask = selectedTask,
+                navigateToListScreen = navigateToListScreen,
+                title = selectedTask.title,
+                description = selectedTask.description,
+                priority = selectedTask.priority,
+                onTitleChange = { taskViewState.selectedTask.title },
+                onDescriptionChange = { taskViewState.selectedTask.description },
+                onPriorityChange = { taskViewState.selectedTask.priority }
+            )
+        }
     }
 }

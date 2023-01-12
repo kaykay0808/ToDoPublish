@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kay.todopublish.data.models.Priority
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.data.repository.ToDoRepository
 import com.kay.todopublish.util.CloseIconState
@@ -23,11 +24,18 @@ class ListViewModel @Inject constructor(
     var viewState by mutableStateOf(ListViewState())
         private set
 
+    private var id = 0
+    private var title = ""
+    private var description = ""
+    private var priority = Priority.LOW
+
     private var searchAppBarState = SearchAppBarState.CLOSED
     private var searchTextInputState = ""
     private var closeIconState = CloseIconState.READY_TO_EMPTY_FIELD
     // TODO get all task
     private var allTask: RequestState<List<TaskData>> = RequestState.Idle
+
+
 
     init {
         getAllTask()

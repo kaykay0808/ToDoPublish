@@ -19,7 +19,7 @@ class TaskViewModel @Inject constructor(
     private val repository: ToDoRepository
 ) : ViewModel() {
 
-    var viewState by mutableStateOf(TaskViewState())
+    var taskViewState by mutableStateOf(TaskViewState())
         private set
 
     private var selectedTask: TaskData? = null
@@ -30,7 +30,7 @@ class TaskViewModel @Inject constructor(
     }
 
     private fun render() {
-        viewState = TaskViewState(
+        taskViewState = TaskViewState(
             selectedTask = selectedTask
         )
     }

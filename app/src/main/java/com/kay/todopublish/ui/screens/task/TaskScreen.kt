@@ -1,5 +1,6 @@
 package com.kay.todopublish.ui.screens.task
 
+
 import android.annotation.SuppressLint
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -13,8 +14,19 @@ import com.kay.todopublish.util.Action
 @Composable
 fun TaskScreen(
     selectedTask: TaskData?,
-    navigateToListScreen: (Action) -> Unit
+    navigateToListScreen: (Action) -> Unit,
+    // taskViewState: TaskViewState,
+    title: String,
+    description: String,
+    priority: Priority,
+    onTitleChange: (String) -> Unit,
+    onDescriptionChange: (String) -> Unit,
+    onPriorityChange: (Priority) -> Unit
 ) {
+    // Observing values from our viewModel. (Title, Description, Priority)
+    // val titleObserved: String by sharedViewModel.title
+    // val descriptionObserved: String by sharedViewModel.description
+    // val priorityObserved: Priority by sharedViewModel.priority
     Scaffold(
         topBar = {
             TaskTopBar(
@@ -24,12 +36,12 @@ fun TaskScreen(
         },
         content = {
             TaskContent(
-                title = "",
-                description = "",
-                priority = Priority.NONE,
-                onTitleChange = {},
-                onDescriptionChange = {},
-                onPriorityChange = {}
+                title = title,
+                description = description, // descriptionObserved
+                priority = priority,
+                onTitleChange = onTitleChange, // {sharedViewModel.title.value = it}
+                onDescriptionChange = onDescriptionChange, // {sharedViewModel.description.value = it}
+                onPriorityChange = onPriorityChange // {sharedViewModel.priority.value = it}
             )
         }
     )
