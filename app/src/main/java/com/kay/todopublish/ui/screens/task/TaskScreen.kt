@@ -15,7 +15,6 @@ import com.kay.todopublish.util.Action
 fun TaskScreen(
     selectedTask: TaskData?,
     navigateToListScreen: (Action) -> Unit,
-    // taskViewState: TaskViewState,
     title: String,
     description: String,
     priority: Priority,
@@ -37,11 +36,11 @@ fun TaskScreen(
         content = {
             TaskContent(
                 title = title,
-                description = description, // descriptionObserved
+                description = description,
                 priority = priority,
-                onTitleChange = onTitleChange, // {sharedViewModel.title.value = it}
-                onDescriptionChange = onDescriptionChange, // {sharedViewModel.description.value = it}
-                onPriorityChange = onPriorityChange // {sharedViewModel.priority.value = it}
+                onTitleChange = onTitleChange,
+                onDescriptionChange = onDescriptionChange,
+                onPriorityChange = onPriorityChange
             )
         }
     )
@@ -50,5 +49,19 @@ fun TaskScreen(
 @Composable
 @Preview
 fun TaskScreenPreview() {
-    // TaskScreen(navigateToListScreen = {})
+    TaskScreen(
+        selectedTask = TaskData(
+            id = 5,
+            title = "THIS IS A PREVIEW",
+            description = "Testing description",
+            priority = Priority.LOW
+        ),
+        navigateToListScreen = {},
+        title = "All by myself",
+        description = "Testing shit",
+        priority = Priority.LOW,
+        onTitleChange = {},
+        onDescriptionChange = {},
+        onPriorityChange = {}
+    )
 }

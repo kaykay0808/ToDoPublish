@@ -26,9 +26,9 @@ class TaskViewModel @Inject constructor(
     private var description = ""
     private var priority = Priority.LOW
 
-    private var selectedTask: RequestState<TaskData> = RequestState.Idle
+    private var selectedTask: TaskData? = null
 
-    init {
+     init {
         getSelectedTask(taskId = id)
     }
 
@@ -43,19 +43,12 @@ class TaskViewModel @Inject constructor(
     }
 
      fun getSelectedTask(taskId: Int) {
-        selectedTask = RequestState.Loading
-        render()
-        try {
-            viewModelScope.launch {
-                repository.getSelectedTask(taskId = taskId).collect {
-                    selectedTask = RequestState.Success(it)
-                    render()
-                }
-            }
-        } catch (e: Exception) {
-            selectedTask = RequestState.Error(e)
-            render()
-        }
+         viewModelScope.launch {
+             repository.getSelectedTask(taskId = taskId).collect {
+                 selectedTask = it
+                 render()
+             }
+         }
     }
 
     // Function that updating our mutableState values (Title, description, priority)
@@ -76,13 +69,5 @@ class TaskViewModel @Inject constructor(
             priority = Priority.LOW
             render()
         }
-    }
-
-    fun defaultValues() {
-        id = 0
-        title = ""
-        description = ""
-        priority = Priority.LOW
-        render()
     }
 }
