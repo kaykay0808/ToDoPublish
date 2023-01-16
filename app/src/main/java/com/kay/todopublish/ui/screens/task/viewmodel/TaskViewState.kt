@@ -9,5 +9,5 @@ data class TaskViewState(
     val description: String = "",
     val priority: Priority = Priority.LOW,
 
-    val selectedTask: TaskData? = null //RequestState<TaskData> = RequestState.Idle
+    val selectedTask: TaskData? = null // RequestState<TaskData> = RequestState.Idle
 )

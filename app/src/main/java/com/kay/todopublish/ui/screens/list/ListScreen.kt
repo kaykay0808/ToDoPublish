@@ -10,14 +10,12 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.kay.todopublish.R
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.ui.screens.list.topbar.ListTopBar
 import com.kay.todopublish.ui.screens.list.viewmodel.ListViewState
 import com.kay.todopublish.ui.theme.floatingActionButtonBackgroundColor
 import com.kay.todopublish.util.RequestState
-import com.kay.todopublish.util.SearchAppBarState
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable

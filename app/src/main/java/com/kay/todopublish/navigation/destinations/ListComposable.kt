@@ -1,5 +1,6 @@
 package com.kay.todopublish.navigation.destinations
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -10,6 +11,7 @@ import com.kay.todopublish.ui.screens.list.viewmodel.ListViewModel
 import com.kay.todopublish.util.CloseIconState
 import com.kay.todopublish.util.Constants.LIST_ARGUMENT_KEY
 import com.kay.todopublish.util.Constants.LIST_SCREEN
+import com.kay.todopublish.util.toAction
 
 // extension function listComposable
 fun NavGraphBuilder.listComposable(
@@ -22,10 +24,16 @@ fun NavGraphBuilder.listComposable(
                 type = NavType.StringType
             }
         )
-    ) {
+    ) { navBackStackEntry ->
+
+        val action = navBackStackEntry.arguments?.getString(LIST_ARGUMENT_KEY).toAction()
         val listViewModel: ListViewModel = hiltViewModel()
         val viewState = listViewModel.viewState
         val allTask = viewState.allTask
+
+        LaunchedEffect(key1 = action) {
+            viewState.action
+        }
 
         ListScreen(
             navigateToTaskScreen = navigateToTaskScreen,
@@ -34,8 +42,8 @@ fun NavGraphBuilder.listComposable(
             onCloseIconClicked = {
                 when (viewState.closeIconState) {
                     CloseIconState.READY_TO_EMPTY_FIELD -> {
-                        listViewModel.defaultTextInputState() // Tømme
-                        listViewModel.readyToCloseSearchBar() // klar til å lukke searchBar
+                        listViewModel.defaultTextInputState() // Empty field
+                        listViewModel.readyToCloseSearchBar() // Ready to close SearchBar.
                     }
                     CloseIconState.READY_TO_CLOSE_SEARCH_BAR -> {
                         if (viewState.searchTextInputState.isNotEmpty()) {

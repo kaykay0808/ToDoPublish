@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.kay.todopublish.data.models.Priority
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.data.repository.ToDoRepository
-import com.kay.todopublish.util.RequestState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,13 +23,13 @@ class TaskViewModel @Inject constructor(
     private var id = 0
     private var title = ""
     private var description = ""
-    private var priority = Priority.LOW
+    private var priority = Priority.NONE
+
+    /*init {
+        getSelectedTask(taskId = id)
+    }*/
 
     private var selectedTask: TaskData? = null
-
-     init {
-        getSelectedTask(taskId = id)
-    }
 
     private fun render() {
         taskViewState = TaskViewState(
@@ -42,17 +41,17 @@ class TaskViewModel @Inject constructor(
         )
     }
 
-     fun getSelectedTask(taskId: Int) {
-         viewModelScope.launch {
-             repository.getSelectedTask(taskId = taskId).collect {
-                 selectedTask = it
-                 render()
-             }
-         }
+    fun getSelectedTask(taskId: Int) {
+        viewModelScope.launch {
+            repository.getSelectedTask(taskId = taskId).collect { task ->
+                selectedTask = task
+                render()
+            }
+        }
     }
 
     // Function that updating our mutableState values (Title, description, priority)
-     fun updateTaskField(selectedTask: TaskData?) {
+    fun updateTaskField(selectedTask: TaskData?) {
         // Check if selectedTask is null (if we have clicked on the specific task)
         if (selectedTask != null) {
             // set the values of each variable from our mutableState
@@ -66,7 +65,7 @@ class TaskViewModel @Inject constructor(
             id = 0
             title = ""
             description = ""
-            priority = Priority.LOW
+            priority = Priority.NONE
             render()
         }
     }

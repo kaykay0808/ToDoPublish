@@ -1,13 +1,14 @@
 package com.kay.todopublish.ui.screens.task
 
-
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.kay.todopublish.data.models.Priority
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.ui.screens.task.topbar.TaskTopBar
+import com.kay.todopublish.ui.screens.task.viewmodel.TaskViewState
 import com.kay.todopublish.util.Action
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -15,13 +16,16 @@ import com.kay.todopublish.util.Action
 fun TaskScreen(
     selectedTask: TaskData?,
     navigateToListScreen: (Action) -> Unit,
-    title: String,
-    description: String,
-    priority: Priority,
-    onTitleChange: (String) -> Unit,
-    onDescriptionChange: (String) -> Unit,
-    onPriorityChange: (Priority) -> Unit
+    // title: String,
+    // description: String,
+    // priority: Priority,
+    // onTitleChange: (String) -> Unit,
+    // onDescriptionChange: (String) -> Unit,
+    // onPriorityChange: (Priority) -> Unit,
+    taskViewState: TaskViewState,
+    // taskViewModel: TaskViewModel = hiltViewModel()
 ) {
+    Log.d("TASK_SCREEN", "$selectedTask")
     // Observing values from our viewModel. (Title, Description, Priority)
     // val titleObserved: String by sharedViewModel.title
     // val descriptionObserved: String by sharedViewModel.description
@@ -29,18 +33,19 @@ fun TaskScreen(
     Scaffold(
         topBar = {
             TaskTopBar(
-                selectedTask = selectedTask,
-                navigateToListScreen = navigateToListScreen
+                selectedTask = taskViewState.selectedTask, // taskViewModel.taskViewState.selectedTask,
+                // selectedTask = selectedTask,
+                navigateToListScreen = navigateToListScreen,
             )
         },
         content = {
             TaskContent(
-                title = title,
-                description = description,
-                priority = priority,
-                onTitleChange = onTitleChange,
-                onDescriptionChange = onDescriptionChange,
-                onPriorityChange = onPriorityChange
+                title = taskViewState.title,
+                description = taskViewState.description,
+                priority = taskViewState.priority,
+                onTitleChange = { taskViewState.title },
+                onDescriptionChange = { taskViewState.description },
+                onPriorityChange = { taskViewState.priority }
             )
         }
     )
@@ -57,11 +62,6 @@ fun TaskScreenPreview() {
             priority = Priority.LOW
         ),
         navigateToListScreen = {},
-        title = "All by myself",
-        description = "Testing shit",
-        priority = Priority.LOW,
-        onTitleChange = {},
-        onDescriptionChange = {},
-        onPriorityChange = {}
+        taskViewState = TaskViewState()
     )
 }

@@ -20,7 +20,6 @@ import com.kay.todopublish.data.models.Priority
 import com.kay.todopublish.ui.theme.LARGE_PADDING
 import com.kay.todopublish.ui.theme.MEDIUM_PADDING
 
-
 @Composable
 fun TaskContent(
     title: String,

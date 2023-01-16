@@ -2,7 +2,6 @@ package com.kay.todopublish.navigation.destinations
 
 import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
-
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
@@ -12,7 +11,6 @@ import com.kay.todopublish.ui.screens.task.viewmodel.TaskViewModel
 import com.kay.todopublish.util.Action
 import com.kay.todopublish.util.Constants.TASK_ARGUMENT_KEY
 import com.kay.todopublish.util.Constants.TASK_SCREEN
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 fun NavGraphBuilder.taskComposable(
     navigateToListScreen: (Action) -> Unit
@@ -26,8 +24,8 @@ fun NavGraphBuilder.taskComposable(
             }
         )
     ) { navBackStackEntry ->
-        val taskId = navBackStackEntry.arguments!!.getInt(TASK_ARGUMENT_KEY)
         val taskViewModel: TaskViewModel = hiltViewModel()
+        val taskId = navBackStackEntry.arguments!!.getInt(TASK_ARGUMENT_KEY)
         val taskViewState = taskViewModel.taskViewState
         val selectedTask = taskViewState.selectedTask
         LaunchedEffect(key1 = taskId) {
@@ -41,12 +39,13 @@ fun NavGraphBuilder.taskComposable(
         TaskScreen(
             selectedTask = selectedTask,
             navigateToListScreen = navigateToListScreen,
-            title = taskViewState.title,
-            description = taskViewState.description,
-            priority = taskViewState.priority,
-            onTitleChange = { taskViewState.title },
-            onDescriptionChange = { taskViewState.description },
-            onPriorityChange = { taskViewState.priority }
+            taskViewState = taskViewState
+            // title = taskViewState.title,
+            // description = taskViewState.description,
+            // priority = taskViewState.priority,
+            // onTitleChange = { taskViewState.title },
+            // onDescriptionChange = { taskViewState.description },
+            // onPriorityChange = { taskViewState.priority }
         )
     }
 }
