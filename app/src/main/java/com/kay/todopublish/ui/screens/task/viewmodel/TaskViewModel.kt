@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.kay.todopublish.data.models.Priority
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.data.repository.ToDoRepository
+import com.kay.todopublish.util.Constants.MAX_TITLE_LENGTH
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -68,5 +69,13 @@ class TaskViewModel @Inject constructor(
             priority = Priority.NONE
             render()
         }
+    }
+
+    // A function updating the title and limit the title length to 20 characters.
+    fun updateTitle(newTitle: String) {
+        if (newTitle.length < MAX_TITLE_LENGTH) {
+            title = newTitle
+        }
+        render()
     }
 }

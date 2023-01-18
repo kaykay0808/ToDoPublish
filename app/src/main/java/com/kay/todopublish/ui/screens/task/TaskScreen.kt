@@ -4,37 +4,34 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import com.kay.todopublish.data.models.Priority
-import com.kay.todopublish.data.models.TaskData
+import androidx.compose.runtime.LaunchedEffect
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kay.todopublish.ui.screens.task.topbar.TaskTopBar
-import com.kay.todopublish.ui.screens.task.viewmodel.TaskViewState
+import com.kay.todopublish.ui.screens.task.viewmodel.TaskViewModel
 import com.kay.todopublish.util.Action
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun TaskScreen(
-    selectedTask: TaskData?,
+    taskId: Int,
     navigateToListScreen: (Action) -> Unit,
-    // title: String,
-    // description: String,
-    // priority: Priority,
-    // onTitleChange: (String) -> Unit,
-    // onDescriptionChange: (String) -> Unit,
-    // onPriorityChange: (Priority) -> Unit,
-    taskViewState: TaskViewState,
-    // taskViewModel: TaskViewModel = hiltViewModel()
 ) {
+    val taskViewModel: TaskViewModel = hiltViewModel()
+    val taskViewState = taskViewModel.taskViewState
+    val selectedTask = taskViewState.selectedTask
+    LaunchedEffect(key1 = taskId) {
+        taskViewModel.getSelectedTask(taskId = taskId)
+    }
+    LaunchedEffect(key1 = selectedTask) {
+        if (selectedTask != null || taskId == -1) {
+            taskViewModel.updateTaskField(selectedTask = selectedTask)
+        }
+    }
     Log.d("TASK_SCREEN", "$selectedTask")
-    // Observing values from our viewModel. (Title, Description, Priority)
-    // val titleObserved: String by sharedViewModel.title
-    // val descriptionObserved: String by sharedViewModel.description
-    // val priorityObserved: Priority by sharedViewModel.priority
     Scaffold(
         topBar = {
             TaskTopBar(
-                selectedTask = taskViewState.selectedTask, // taskViewModel.taskViewState.selectedTask,
-                // selectedTask = selectedTask,
+                selectedTask = taskViewState.selectedTask,
                 navigateToListScreen = navigateToListScreen,
             )
         },
@@ -43,25 +40,10 @@ fun TaskScreen(
                 title = taskViewState.title,
                 description = taskViewState.description,
                 priority = taskViewState.priority,
-                onTitleChange = { taskViewState.title },
+                onTitleChange = { taskViewModel.updateTitle(it) },
                 onDescriptionChange = { taskViewState.description },
                 onPriorityChange = { taskViewState.priority }
             )
         }
-    )
-}
-
-@Composable
-@Preview
-fun TaskScreenPreview() {
-    TaskScreen(
-        selectedTask = TaskData(
-            id = 5,
-            title = "THIS IS A PREVIEW",
-            description = "Testing description",
-            priority = Priority.LOW
-        ),
-        navigateToListScreen = {},
-        taskViewState = TaskViewState()
     )
 }

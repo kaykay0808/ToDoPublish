@@ -8,40 +8,60 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kay.todopublish.R
-import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.ui.screens.list.topbar.ListTopBar
-import com.kay.todopublish.ui.screens.list.viewmodel.ListViewState
+import com.kay.todopublish.ui.screens.list.viewmodel.ListViewModel
 import com.kay.todopublish.ui.theme.floatingActionButtonBackgroundColor
-import com.kay.todopublish.util.RequestState
+import com.kay.todopublish.util.Action
+import com.kay.todopublish.util.CloseIconState
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ListScreen(
     navigateToTaskScreen: (taskId: Int) -> Unit,
-    viewState: ListViewState,
-    onSearchIconClicked: () -> Unit,
-    onCloseIconClicked: () -> Unit,
-    onSearchTextChange: (String) -> Unit,
-    // toDoViewModel: ToDoViewModel,
-    task: RequestState<List<TaskData>>
+    action: Action
 ) {
-    // LaunchedEffect(key1 = true) { toDoViewModel.getAllTask() }
+    val listViewModel: ListViewModel = hiltViewModel()
+    val viewState = listViewModel.viewState
+    val allTask = viewState.allTask
+    LaunchedEffect(key1 = action) {
+        viewState.action
+    }
+    // LaunchedEffect(key1 = true) { /*toDoViewModel.getAllTask()*/ }
     // val allTask by sharedViewModel.allTask.collectAsState()
     Scaffold(
         topBar = {
             ListTopBar(
-                onSearchIconClicked = onSearchIconClicked,
-                onCloseIconClicked = onCloseIconClicked,
+                onSearchIconClicked = { listViewModel.openSearchBar() },
+                onCloseIconClicked = {
+                    when (viewState.closeIconState) {
+                        CloseIconState.READY_TO_EMPTY_FIELD -> {
+                            listViewModel.defaultTextInputState() // Empty field
+                            listViewModel.readyToCloseSearchBar() // Ready to close SearchBar.
+                        }
+                        CloseIconState.READY_TO_CLOSE_SEARCH_BAR -> {
+                            if (viewState.searchTextInputState.isNotEmpty()) {
+                                listViewModel.defaultTextInputState()
+                            } else {
+                                listViewModel.closeSearchBar()
+                                listViewModel.readyToEmptyField() // set back to READY_TO_EMPTY_FIELD
+                            }
+                        }
+                    }
+                },
                 viewState = viewState,
-                onSearchTextChange = onSearchTextChange,
+                onSearchTextChange = { onNewTextEdit ->
+                    listViewModel.newInputTextChange(onNewTextEdit)
+                }
             )
         },
         content = {
             ListContent(
-                task = task,
+                task = allTask,
                 navigateToTaskScreen = navigateToTaskScreen
             )
         },
@@ -67,16 +87,3 @@ fun ListFloatingActionButton(onFloatingActionButtonClicked: (taskId: Int) -> Uni
         )
     }
 }
-
-/*@Composable
-@Preview
-private fun ListScreenPreview() {
-    ListScreen(
-        navigateToTaskScreen = {},
-        viewState = ListViewState(SearchAppBarState.CLOSED),
-        onSearchIconClicked = {},
-        onCloseIconClicked = {},
-        onSearchTextChange = {},
-        task = RequestState.Loading
-    )
-}*/
