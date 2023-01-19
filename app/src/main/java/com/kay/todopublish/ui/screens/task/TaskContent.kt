@@ -1,5 +1,6 @@
 package com.kay.todopublish.ui.screens.task
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,6 +30,7 @@ fun TaskContent(
     onDescriptionChange: (String) -> Unit,
     onPriorityChange: (Priority) -> Unit
 ) {
+    Log.d("TASK_CONTENT","$onTitleChange ,$onDescriptionChange")
     Column(
         modifier = Modifier
             .fillMaxSize() // Takes the whole content in the Scaffold

@@ -1,5 +1,7 @@
 package com.kay.todopublish.ui.screens.task.viewmodel
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -77,5 +79,23 @@ class TaskViewModel @Inject constructor(
             title = newTitle
         }
         render()
+    }
+
+    fun updateDescription(newDescription: String) {
+        description = newDescription
+        render()
+    }
+
+    // Validation if our field in Task Screen is empty
+    fun validateFields(): Boolean {
+        return title.isNotEmpty() && description.isNotEmpty()
+    }
+
+    fun displayToast(context: Context) {
+        Toast.makeText(
+            context,
+            "Text fields empty, please fill in the title and the description",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
