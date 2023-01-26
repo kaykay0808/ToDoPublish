@@ -9,7 +9,6 @@ fun TaskTopBar(
     selectedTask: TaskData?,
     navigateToListScreen: (Action) -> Unit,
 ) {
-
     if (selectedTask == null) {
         NewTaskTopBar(navigateToListScreen = navigateToListScreen)
     } else {

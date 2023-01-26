@@ -30,7 +30,7 @@ fun TaskContent(
     onDescriptionChange: (String) -> Unit,
     onPriorityChange: (Priority) -> Unit
 ) {
-    Log.d("TASK_CONTENT","$onTitleChange ,$onDescriptionChange")
+    Log.d("TASK_CONTENT", "$onTitleChange ,$onDescriptionChange")
     Column(
         modifier = Modifier
             .fillMaxSize() // Takes the whole content in the Scaffold

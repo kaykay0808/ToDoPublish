@@ -35,17 +35,16 @@ fun TaskScreen(
             TaskTopBar(
                 selectedTask = taskViewState.selectedTask,
                 navigateToListScreen = { action ->
-                    if(action == Action.NO_ACTION) {
+                    if (action == Action.NO_ACTION) {
                         navigateToListScreen(action)
                     } else {
-                        if(taskViewModel.validateFields()) {
+                        if (taskViewModel.validateFields()) {
+                            taskViewModel.databaseActionsManage(action)
                             navigateToListScreen(action)
                         } else {
                             taskViewModel.displayToast(context = context)
-
                         }
                     }
-
                 },
             )
         },
@@ -56,7 +55,7 @@ fun TaskScreen(
                 priority = taskViewState.priority,
                 onTitleChange = { taskViewModel.updateTitle(it) },
                 onDescriptionChange = { taskViewModel.updateDescription(it) },
-                onPriorityChange = { taskViewState.priority }
+                onPriorityChange = { taskViewModel.updatePriority(it) }
             )
         }
     )

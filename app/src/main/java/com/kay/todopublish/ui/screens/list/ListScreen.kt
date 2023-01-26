@@ -8,7 +8,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,9 +27,7 @@ fun ListScreen(
     val listViewModel: ListViewModel = hiltViewModel()
     val viewState = listViewModel.viewState
     val allTask = viewState.allTask
-    LaunchedEffect(key1 = action) {
-        viewState.action
-    }
+
     // LaunchedEffect(key1 = true) { /*toDoViewModel.getAllTask()*/ }
     // val allTask by sharedViewModel.allTask.collectAsState()
     Scaffold(

@@ -10,8 +10,10 @@ import androidx.lifecycle.viewModelScope
 import com.kay.todopublish.data.models.Priority
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.data.repository.ToDoRepository
+import com.kay.todopublish.util.Action
 import com.kay.todopublish.util.Constants.MAX_TITLE_LENGTH
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,7 +28,8 @@ class TaskViewModel @Inject constructor(
     private var id = 0
     private var title = ""
     private var description = ""
-    private var priority = Priority.NONE
+    private var priority = Priority.LOW
+    private var actionTaskScreen = Action.NO_ACTION
 
     /*init {
         getSelectedTask(taskId = id)
@@ -40,16 +43,59 @@ class TaskViewModel @Inject constructor(
             title = title,
             description = description,
             priority = priority,
-            selectedTask = selectedTask
+            selectedTask = selectedTask,
+            actionTaskScreen = actionTaskScreen
         )
     }
 
+    // Create, Read, Update, Delete
     fun getSelectedTask(taskId: Int) {
         viewModelScope.launch {
             repository.getSelectedTask(taskId = taskId).collect { task ->
                 selectedTask = task
                 render()
             }
+        }
+    }
+
+    // Create, Read, Update, Delete
+    private fun addTask() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val taskData = TaskData(
+                title = title,
+                description = description,
+                priority = priority
+            )
+            repository.addTask(taskData = taskData)
+            render()
+        }
+    }
+
+    // Create, Read, Update, Delete
+    private fun updateTask() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val updateTaskData = TaskData(
+                id = id,
+                title = title,
+                description = description,
+                priority = priority
+            )
+            repository.updateTask(taskData = updateTaskData)
+            render()
+        }
+    }
+
+    // Create, Read, Update, Delete
+    private fun deleteSingleTask() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val deleteSingleTaskData = TaskData(
+                id = id,
+                title = title,
+                description = description,
+                priority = priority
+            )
+            repository.deleteTask(taskData = deleteSingleTaskData)
+            render()
         }
     }
 
@@ -68,7 +114,7 @@ class TaskViewModel @Inject constructor(
             id = 0
             title = ""
             description = ""
-            priority = Priority.NONE
+            priority = Priority.LOW
             render()
         }
     }
@@ -78,6 +124,11 @@ class TaskViewModel @Inject constructor(
         if (newTitle.length < MAX_TITLE_LENGTH) {
             title = newTitle
         }
+        render()
+    }
+
+    fun updatePriority(newPriority: Priority) {
+        priority = newPriority
         render()
     }
 
@@ -97,5 +148,24 @@ class TaskViewModel @Inject constructor(
             "Text fields empty, please fill in the title and the description",
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    fun databaseActionsManage(action: Action) {
+        when (action) {
+            Action.ADD -> {
+                addTask()
+            }
+            Action.UPDATE -> {
+                updateTask()
+            }
+            Action.DELETE -> {
+                deleteSingleTask()
+            }
+            Action.DELETE_ALL -> {}
+            Action.UNDO -> {}
+            else -> {}
+        }
+        this.actionTaskScreen = Action.NO_ACTION
+        render()
     }
 }

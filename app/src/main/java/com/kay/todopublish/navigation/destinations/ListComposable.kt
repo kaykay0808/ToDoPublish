@@ -1,5 +1,6 @@
 package com.kay.todopublish.navigation.destinations
 
+import android.util.Log
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
@@ -21,6 +22,7 @@ fun NavGraphBuilder.listComposable(
         )
     ) { navBackStackEntry ->
         val action = navBackStackEntry.arguments?.getString(LIST_ARGUMENT_KEY).toAction()
+        Log.d("ListComposable", action.name)
         ListScreen(
             action = action,
             navigateToTaskScreen = navigateToTaskScreen,
