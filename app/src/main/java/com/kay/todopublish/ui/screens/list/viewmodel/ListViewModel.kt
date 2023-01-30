@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.data.repository.ToDoRepository
+import com.kay.todopublish.util.Action
 import com.kay.todopublish.util.CloseIconState
 import com.kay.todopublish.util.RequestState
 import com.kay.todopublish.util.SearchAppBarState
@@ -27,6 +28,8 @@ class ListViewModel @Inject constructor(
     private var searchTextInputState = ""
     private var closeIconState = CloseIconState.READY_TO_EMPTY_FIELD
     private var allTask: RequestState<List<TaskData>> = RequestState.Idle
+    private var actionListScreen = Action.NO_ACTION
+    private var titleFromTaskScreen = ""
 
     init {
         getAllTask()
@@ -38,7 +41,28 @@ class ListViewModel @Inject constructor(
             searchTextInputState = searchTextInputState,
             closeIconState = closeIconState,
             allTask = allTask,
+            actionListScreen = actionListScreen,
+            titleFromTaskScreen = titleFromTaskScreen
         )
+    }
+
+    // Get All Task
+    // private val _allTask = List<TaskData>(emptyList())
+    // val allTask: StateFlow<List<TaskData>> = _allTask
+    private fun getAllTask() {
+        allTask = RequestState.Loading
+        render()
+        try {
+            viewModelScope.launch {
+                repository.getAllTask.collect {
+                    allTask = RequestState.Success(it)
+                    render()
+                }
+            }
+        } catch (e: Exception) {
+            allTask = RequestState.Error(e)
+            render()
+        }
     }
 
     /*val searchAppBarState: MutableState<SearchAppBarState> =
@@ -75,22 +99,13 @@ class ListViewModel @Inject constructor(
         render()
     }
 
-    // Get All Task
-    // private val _allTask = List<TaskData>(emptyList())
-    // val allTask: StateFlow<List<TaskData>> = _allTask
-    private fun getAllTask() {
-        allTask = RequestState.Loading
-        render()
-        try {
-            viewModelScope.launch {
-                repository.getAllTask.collect {
-                    allTask = RequestState.Success(it)
-                    render()
-                }
-            }
-        } catch (e: Exception) {
-            allTask = RequestState.Error(e)
-            render()
+    fun databaseActionManageList(action: Action) {
+        when(action) {
+            Action.DELETE_ALL -> {}
+            Action.UNDO -> {}
+            else-> {}
         }
+        this.actionListScreen = Action.NO_ACTION
+        render()
     }
 }

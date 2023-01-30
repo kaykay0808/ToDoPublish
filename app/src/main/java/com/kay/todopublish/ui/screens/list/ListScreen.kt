@@ -5,9 +5,14 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.rememberDismissState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -17,6 +22,7 @@ import com.kay.todopublish.ui.screens.list.viewmodel.ListViewModel
 import com.kay.todopublish.ui.theme.floatingActionButtonBackgroundColor
 import com.kay.todopublish.util.Action
 import com.kay.todopublish.util.CloseIconState
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -27,10 +33,16 @@ fun ListScreen(
     val listViewModel: ListViewModel = hiltViewModel()
     val viewState = listViewModel.viewState
     val allTask = viewState.allTask
+    val scaffoldState = rememberScaffoldState()
 
-    // LaunchedEffect(key1 = true) { /*toDoViewModel.getAllTask()*/ }
-    // val allTask by sharedViewModel.allTask.collectAsState()
+    DisplaySnackBar(
+        scaffoldState = scaffoldState,
+        // handleDatabaseAction = {listViewModel.databaseActionManageList(action = action)},
+        taskTitle = listViewModel.viewState.titleFromTaskScreen,
+        action = action
+    )
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = {
             ListTopBar(
                 onSearchIconClicked = { listViewModel.openSearchBar() },
@@ -82,5 +94,25 @@ fun ListFloatingActionButton(onFloatingActionButtonClicked: (taskId: Int) -> Uni
             contentDescription = stringResource(id = R.string.add_button),
             tint = Color.White
         )
+    }
+}
+
+@Composable
+fun DisplaySnackBar(
+    scaffoldState: ScaffoldState,
+    // handleDatabaseAction: () -> Unit,
+    taskTitle: String,
+    action: Action
+) {
+    // handleDatabaseAction()
+    // val scope = rememberCoroutineScope()
+    LaunchedEffect(key1 = action , key2 = taskTitle) {
+        if (action != Action.NO_ACTION) {
+            val snackBarResult = scaffoldState.snackbarHostState.showSnackbar(
+                message = "${action.name} $taskTitle ",
+                actionLabel = "Ok"
+            )
+            // scope.launch {}
+        }
     }
 }
