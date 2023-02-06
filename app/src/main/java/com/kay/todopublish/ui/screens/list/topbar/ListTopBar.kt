@@ -9,6 +9,7 @@ fun ListTopBar(
     viewState: ListViewState,
     onSearchIconClicked: () -> Unit,
     onCloseIconClicked: () -> Unit,
+    onSearchImeClicked: (String) -> Unit,
     onSearchTextChange: (String) -> Unit,
     // toDoViewModel: ToDoViewModel,
     // searchAppBarState: SearchAppBarState,
@@ -27,7 +28,7 @@ fun ListTopBar(
                 textSearchInput = viewState.searchTextInputState,
                 onSearchTextChange = onSearchTextChange,
                 onCloseIconClicked = onCloseIconClicked,
-                onSearchClicked = {}
+                onSearchImeClicked = onSearchImeClicked
             )
         }
     }

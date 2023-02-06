@@ -3,18 +3,13 @@ package com.kay.todopublish.ui.screens.task
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.kay.todopublish.ui.screens.list.DisplaySnackBar
 import com.kay.todopublish.ui.screens.task.topbar.TaskTopBar
 import com.kay.todopublish.ui.screens.task.viewmodel.TaskViewModel
 import com.kay.todopublish.util.Action
-import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable

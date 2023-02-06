@@ -8,11 +8,9 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.rememberDismissState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,7 +20,6 @@ import com.kay.todopublish.ui.screens.list.viewmodel.ListViewModel
 import com.kay.todopublish.ui.theme.floatingActionButtonBackgroundColor
 import com.kay.todopublish.util.Action
 import com.kay.todopublish.util.CloseIconState
-import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -38,7 +35,6 @@ fun ListScreen(
     DisplaySnackBar(
         scaffoldState = scaffoldState,
         // handleDatabaseAction = {listViewModel.databaseActionManageList(action = action)},
-        taskTitle = listViewModel.viewState.titleFromTaskScreen,
         action = action
     )
     Scaffold(
@@ -63,6 +59,9 @@ fun ListScreen(
                     }
                 },
                 viewState = viewState,
+                onSearchImeClicked = { searchQuery ->
+                    listViewModel.searchDatabase(searchQuery = searchQuery)
+                },
                 onSearchTextChange = { onNewTextEdit ->
                     listViewModel.newInputTextChange(onNewTextEdit)
                 }
@@ -70,7 +69,9 @@ fun ListScreen(
         },
         content = {
             ListContent(
-                task = allTask,
+                allTask = allTask,
+                searchedTask = viewState.searchTask,
+                searchAppBarState = viewState.searchAppBarState,
                 navigateToTaskScreen = navigateToTaskScreen
             )
         },
@@ -101,15 +102,17 @@ fun ListFloatingActionButton(onFloatingActionButtonClicked: (taskId: Int) -> Uni
 fun DisplaySnackBar(
     scaffoldState: ScaffoldState,
     // handleDatabaseAction: () -> Unit,
-    taskTitle: String,
-    action: Action
+    // taskTitle: String,
+    action: Action,
+    // onUndoClicked: (Action) -> Unit,
+    // listViewModel: ListViewModel
 ) {
     // handleDatabaseAction()
     // val scope = rememberCoroutineScope()
-    LaunchedEffect(key1 = action , key2 = taskTitle) {
+    LaunchedEffect(key1 = action) {
         if (action != Action.NO_ACTION) {
             val snackBarResult = scaffoldState.snackbarHostState.showSnackbar(
-                message = "${action.name} $taskTitle ",
+                message = "${action.name} Task Done!! ",
                 actionLabel = "Ok"
             )
             // scope.launch {}

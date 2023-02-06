@@ -1,5 +1,6 @@
 package com.kay.todopublish.ui.screens.list.viewmodel
 
+import androidx.compose.material.SnackbarResult
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -28,8 +29,8 @@ class ListViewModel @Inject constructor(
     private var searchTextInputState = ""
     private var closeIconState = CloseIconState.READY_TO_EMPTY_FIELD
     private var allTask: RequestState<List<TaskData>> = RequestState.Idle
+    private var searchTask: RequestState<List<TaskData>> = RequestState.Idle
     private var actionListScreen = Action.NO_ACTION
-    private var titleFromTaskScreen = ""
 
     init {
         getAllTask()
@@ -41,8 +42,8 @@ class ListViewModel @Inject constructor(
             searchTextInputState = searchTextInputState,
             closeIconState = closeIconState,
             allTask = allTask,
-            actionListScreen = actionListScreen,
-            titleFromTaskScreen = titleFromTaskScreen
+            searchTask = searchTask,
+            actionListScreen = actionListScreen
         )
     }
 
@@ -63,6 +64,25 @@ class ListViewModel @Inject constructor(
             allTask = RequestState.Error(e)
             render()
         }
+    }
+
+    fun searchDatabase(searchQuery: String) {
+        searchTask = RequestState.Loading
+        render()
+        try {
+            viewModelScope.launch {
+                repository.searchDatabase(searchQuery = "%$searchQuery%") // Need to pass pass the value between %% symbols
+                    .collect { searchTaskTyped ->
+                        searchTask = RequestState.Success(searchTaskTyped)
+                        render()
+                    }
+            }
+        } catch (e: Exception) {
+            searchTask = RequestState.Error(e)
+            render()
+        }
+        searchAppBarState = SearchAppBarState.TRIGGERED
+        render()
     }
 
     /*val searchAppBarState: MutableState<SearchAppBarState> =
@@ -99,11 +119,29 @@ class ListViewModel @Inject constructor(
         render()
     }
 
+    fun returningActionToString(action: Action): String {
+        return if (action.name == "DELETE") {
+            "UNDO"
+        } else {
+            "OK"
+        }
+    }
+
+    fun undoDeleteTask(
+        action: Action,
+        snackBarResult: SnackbarResult,
+        onUndoClicked: (Action) -> Unit
+    ) {
+        if (snackBarResult == SnackbarResult.ActionPerformed && action == Action.DELETE) {
+            onUndoClicked(Action.UNDO)
+        }
+    }
+
     fun databaseActionManageList(action: Action) {
-        when(action) {
+        when (action) {
             Action.DELETE_ALL -> {}
             Action.UNDO -> {}
-            else-> {}
+            else -> {}
         }
         this.actionListScreen = Action.NO_ACTION
         render()

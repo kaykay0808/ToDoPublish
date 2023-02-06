@@ -17,9 +17,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -29,14 +31,17 @@ import com.kay.todopublish.ui.theme.TOP_APP_BAR_HEIGHT
 import com.kay.todopublish.ui.theme.topAppBarBackgroundColor
 import com.kay.todopublish.ui.theme.topAppBarContentColor
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchAppBar(
     textSearchInput: String,
     onSearchTextChange: (String) -> Unit,
     onCloseIconClicked: () -> Unit,
-    onSearchClicked: (String) -> Unit, // When we actually search something (on the app keyboard)
+    onSearchImeClicked: (String) -> Unit, // When we actually search something (on the app keyboard)
     // viewState: ToDoViewState,
 ) {
+    // A controller that makes the keyboard close after we click the searchButton
+    val keyboardController = LocalSoftwareKeyboardController.current
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -86,7 +91,12 @@ fun SearchAppBar(
                 }
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            keyboardActions = KeyboardActions(onSearch = { onSearchClicked(textSearchInput) }),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    onSearchImeClicked(textSearchInput)
+                    keyboardController?.hide()
+                },
+            ),
             colors = TextFieldDefaults.textFieldColors(
                 cursorColor = MaterialTheme.colors.topAppBarContentColor,
                 focusedIndicatorColor = Color.Transparent,
@@ -105,6 +115,6 @@ private fun SearchAppBarPreview() {
         textSearchInput = "",
         onSearchTextChange = {},
         onCloseIconClicked = {},
-        onSearchClicked = {}
+        onSearchImeClicked = {}
     )
 }

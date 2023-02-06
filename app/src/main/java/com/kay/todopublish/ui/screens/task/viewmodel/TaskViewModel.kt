@@ -1,6 +1,7 @@
 package com.kay.todopublish.ui.screens.task.viewmodel
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -58,6 +59,25 @@ class TaskViewModel @Inject constructor(
         }
     }
 
+    fun databaseActionsManage(action: Action) {
+        when (action) {
+            Action.ADD -> {
+                addTask()
+            }
+            Action.UPDATE -> {
+                updateTask()
+            }
+            Action.DELETE -> {
+                deleteSingleTask()
+            }
+            Action.DELETE_ALL -> {}
+            Action.UNDO -> {}
+            else -> {}
+        }
+        this.actionTaskScreen = Action.NO_ACTION
+        render()
+    }
+
     // Create, Read, Update, Delete
     private fun addTask() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -103,6 +123,7 @@ class TaskViewModel @Inject constructor(
     fun updateTaskField(selectedTask: TaskData?) {
         // Check if selectedTask is null (if we have clicked on the specific task)
         if (selectedTask != null) {
+            Log.d("updateTaskField", selectedTask.toString())
             // set the values of each variable from our mutableState
             id = selectedTask.id
             title = selectedTask.title
@@ -142,30 +163,12 @@ class TaskViewModel @Inject constructor(
         return title.isNotEmpty() && description.isNotEmpty()
     }
 
+    // A Toast warning if fields are empty in the task screen
     fun displayToast(context: Context) {
         Toast.makeText(
             context,
             "Text fields empty, please fill in the title and the description",
             Toast.LENGTH_SHORT
         ).show()
-    }
-
-    fun databaseActionsManage(action: Action) {
-        when (action) {
-            Action.ADD -> {
-                addTask()
-            }
-            Action.UPDATE -> {
-                updateTask()
-            }
-            Action.DELETE -> {
-                deleteSingleTask()
-            }
-            Action.DELETE_ALL -> {}
-            Action.UNDO -> {}
-            else -> {}
-        }
-        this.actionTaskScreen = Action.NO_ACTION
-        render()
     }
 }
