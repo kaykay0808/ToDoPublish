@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.kay.todopublish.data.models.Priority
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.data.repository.ToDoRepository
+import com.kay.todopublish.ui.ViewEffects
 import com.kay.todopublish.util.Action
 import com.kay.todopublish.util.Constants.MAX_TITLE_LENGTH
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +24,7 @@ class TaskViewModel @Inject constructor(
     private val repository: ToDoRepository
 ) : ViewModel() {
 
+    /** == VIEW-STATES == */
     var taskViewState by mutableStateOf(TaskViewState())
         private set
 
@@ -31,11 +33,6 @@ class TaskViewModel @Inject constructor(
     private var description = ""
     private var priority = Priority.LOW
     private var actionTaskScreen = Action.NO_ACTION
-
-    /*init {
-        getSelectedTask(taskId = id)
-    }*/
-
     private var selectedTask: TaskData? = null
 
     private fun render() {
@@ -49,6 +46,14 @@ class TaskViewModel @Inject constructor(
         )
     }
 
+    /** == VIEW-EFFECTS ==*/
+
+    private val viewEffects = ViewEffects<TaskViewEffects>()
+
+    sealed interface TaskViewEffects {
+        object Navigate : TaskViewEffects
+    }
+
     // Create, Read, Update, Delete
     fun getSelectedTask(taskId: Int) {
         viewModelScope.launch {
@@ -59,7 +64,7 @@ class TaskViewModel @Inject constructor(
         }
     }
 
-    fun databaseActionsManage(action: Action) {
+    private fun manageDatabaseAction(action: Action) {
         when (action) {
             Action.ADD -> {
                 addTask()
@@ -74,8 +79,26 @@ class TaskViewModel @Inject constructor(
             Action.UNDO -> {}
             else -> {}
         }
+        viewEffects.send(TaskViewEffects.Navigate)
         this.actionTaskScreen = Action.NO_ACTION
-        render()
+        // render()
+    }
+
+    fun navigationHandling(
+        action: Action,
+        navigateToListScreen: () -> Unit,
+        context: Context
+    ) {
+        if (action == Action.NO_ACTION) {
+            navigateToListScreen()
+        } else {
+            if (validateFields()) {
+                manageDatabaseAction(action)
+                navigateToListScreen()
+            } else {
+                displayToast(context = context)
+            }
+        }
     }
 
     // Create, Read, Update, Delete
@@ -159,12 +182,12 @@ class TaskViewModel @Inject constructor(
     }
 
     // Validation if our field in Task Screen is empty
-    fun validateFields(): Boolean {
+    private fun validateFields(): Boolean {
         return title.isNotEmpty() && description.isNotEmpty()
     }
 
     // A Toast warning if fields are empty in the task screen
-    fun displayToast(context: Context) {
+    private fun displayToast(context: Context) {
         Toast.makeText(
             context,
             "Text fields empty, please fill in the title and the description",

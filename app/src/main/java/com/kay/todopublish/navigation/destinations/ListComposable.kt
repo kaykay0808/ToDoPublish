@@ -24,7 +24,7 @@ fun NavGraphBuilder.listComposable(
         val action = navBackStackEntry.arguments?.getString(LIST_ARGUMENT_KEY).toAction()
         Log.d("ListComposable", action.name)
         ListScreen(
-            action = action,
+            // action = action,
             navigateToTaskScreen = navigateToTaskScreen,
         )
     }

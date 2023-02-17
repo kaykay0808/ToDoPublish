@@ -13,7 +13,7 @@ data class ListViewState(
     val closeIconState: CloseIconState = CloseIconState.READY_TO_EMPTY_FIELD,
     // Room
     val allTask: RequestState<List<TaskData>> = RequestState.Idle, // List<TaskData> = emptyList()
-    val actionListScreen: Action = Action.NO_ACTION,
-    val searchTask: RequestState<List<TaskData>> = RequestState.Idle
+    val actionForSnackBar: Action = Action.NO_ACTION,
+    val searchTask: RequestState<List<TaskData>> = RequestState.Idle,
     // val titleFromTaskScreen: String = ""
 )

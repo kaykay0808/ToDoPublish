@@ -1,8 +1,11 @@
 package com.kay.todopublish.ui.screens.list
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.util.RequestState
 import com.kay.todopublish.util.SearchAppBarState
@@ -55,6 +58,7 @@ fun HandleListContentState(
 }
 
 // Function that will display task when content is not empty
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DisplayTask(
     taskFromList: List<TaskData>,
@@ -68,6 +72,7 @@ fun DisplayTask(
             }
         ) { task ->
             TaskItem(
+                modifier = Modifier.animateItemPlacement(),
                 taskData = task,
                 navigateToTaskScreen = navigateToTaskScreen
             )

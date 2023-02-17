@@ -31,7 +31,7 @@ import com.kay.todopublish.ui.theme.topAppBarContentColor
 fun DefaultListAppBar(
     onSearchIconClicked: () -> Unit,
     onSortIconClicked: (Priority) -> Unit,
-    onDeleteIconClicked: () -> Unit
+    onDeleteAllIconClicked: () -> Unit
 ) {
     TopAppBar(
         title = {
@@ -44,7 +44,7 @@ fun DefaultListAppBar(
             DefaultBarActions(
                 onSearchIconClicked = onSearchIconClicked,
                 onSortIconClicked = onSortIconClicked,
-                onDeleteIconClicked = onDeleteIconClicked
+                onDeleteAllIconClicked = onDeleteAllIconClicked
             )
         },
         backgroundColor = MaterialTheme.colors.topAppBarBackgroundColor
@@ -55,12 +55,12 @@ fun DefaultListAppBar(
 fun DefaultBarActions(
     onSearchIconClicked: () -> Unit,
     onSortIconClicked: (Priority) -> Unit,
-    onDeleteIconClicked: () -> Unit
+    onDeleteAllIconClicked: () -> Unit
 ) {
     // Calling our 3 action functions which we Define in our 3 different functions
     SearchAction(onSearchIconClicked = onSearchIconClicked)
     SortAction(onSortIconClicked = onSortIconClicked)
-    DeleteAllAction(onDeleteIconClicked = onDeleteIconClicked)
+    DeleteAllAction(onDeleteAllIconClicked = onDeleteAllIconClicked)
 }
 
 // Actions.
@@ -140,11 +140,13 @@ fun SortAction(
 
 // action 3
 @Composable
-fun DeleteAllAction(onDeleteIconClicked: () -> Unit) {
+fun DeleteAllAction(onDeleteAllIconClicked: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     IconButton(
-        onClick = { expanded = true }
+        onClick = {
+            expanded = true
+        }
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_vertical_menu),
@@ -158,7 +160,7 @@ fun DeleteAllAction(onDeleteIconClicked: () -> Unit) {
             DropdownMenuItem(
                 onClick = {
                     expanded = false
-                    onDeleteIconClicked()
+                    onDeleteAllIconClicked()
                 }
             ) {
                 Text(
@@ -177,6 +179,6 @@ fun DefaultAppBarPreview() {
     DefaultListAppBar(
         onSearchIconClicked = {},
         onSortIconClicked = {},
-        onDeleteIconClicked = {}
+        onDeleteAllIconClicked = {}
     )
 }

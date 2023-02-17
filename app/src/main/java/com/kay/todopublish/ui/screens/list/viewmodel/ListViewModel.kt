@@ -13,6 +13,7 @@ import com.kay.todopublish.util.CloseIconState
 import com.kay.todopublish.util.RequestState
 import com.kay.todopublish.util.SearchAppBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,6 +21,8 @@ import javax.inject.Inject
 class ListViewModel @Inject constructor(
     private val repository: ToDoRepository
 ) : ViewModel() {
+
+    private var currentList: List<TaskData> = emptyList()
 
     /** ============ Search Bar State ================= */
     var viewState by mutableStateOf(ListViewState())
@@ -30,7 +33,7 @@ class ListViewModel @Inject constructor(
     private var closeIconState = CloseIconState.READY_TO_EMPTY_FIELD
     private var allTask: RequestState<List<TaskData>> = RequestState.Idle
     private var searchTask: RequestState<List<TaskData>> = RequestState.Idle
-    private var actionListScreen = Action.NO_ACTION
+    private var actionForSnackBar = Action.NO_ACTION
 
     init {
         getAllTask()
@@ -43,7 +46,7 @@ class ListViewModel @Inject constructor(
             closeIconState = closeIconState,
             allTask = allTask,
             searchTask = searchTask,
-            actionListScreen = actionListScreen
+            actionForSnackBar = actionForSnackBar
         )
     }
 
@@ -55,13 +58,23 @@ class ListViewModel @Inject constructor(
         render()
         try {
             viewModelScope.launch {
-                repository.getAllTask.collect {
-                    allTask = RequestState.Success(it)
+                repository.getAllTask.collect { updatedList ->
+                    allTask = RequestState.Success(updatedList)
+                    // Listening updating.
+                    manageActions(updatedList)
+                    currentList = updatedList
                     render()
                 }
             }
         } catch (e: Exception) {
             allTask = RequestState.Error(e)
+            render()
+        }
+    }
+
+    fun deleteAllTask() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllTask()
             render()
         }
     }
@@ -119,6 +132,44 @@ class ListViewModel @Inject constructor(
         render()
     }
 
+    fun setMessage(action: Action): String {
+        return when (action) {
+            Action.DELETE_ALL -> "All Task Removed"
+            else -> {
+                "${action.name} Task Done!"
+            }
+        }
+    }
+
+    fun setActions() {
+        actionForSnackBar = Action.DELETE_ALL
+        render()
+    }
+
+    private fun manageActions(updatedList: List<TaskData>) {
+        if (updatedList.isEmpty()) {
+            actionForSnackBar = Action.DELETE_ALL
+        } else if (currentList.isEmpty()) {
+            actionForSnackBar = Action.NO_ACTION
+        } else if (currentList.size > updatedList.size) {
+            actionForSnackBar = Action.ADD
+        } else if (currentList.size < updatedList.size) {
+            actionForSnackBar = Action.DELETE
+        } else {
+            actionForSnackBar = Action.UPDATE
+        }
+
+
+        // if "the old" is similar to "current list" Then {
+        // -> set the action to update.
+        // else Current list is bigger then the old list then {
+        // -> set the action to add
+        // else if current list is smaller then old list then {
+        // set the action to delete
+        // else if current list is empty then {
+        // -> set the action to delete all
+    }
+
     fun returningActionToString(action: Action): String {
         return if (action.name == "DELETE") {
             "UNDO"
@@ -139,11 +190,13 @@ class ListViewModel @Inject constructor(
 
     fun databaseActionManageList(action: Action) {
         when (action) {
-            Action.DELETE_ALL -> {}
+            Action.DELETE_ALL -> {
+                deleteAllTask()
+            }
             Action.UNDO -> {}
             else -> {}
         }
-        this.actionListScreen = Action.NO_ACTION
+        this.actionForSnackBar = Action.NO_ACTION
         render()
     }
 }

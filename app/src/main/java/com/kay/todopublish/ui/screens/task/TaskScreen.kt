@@ -9,13 +9,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kay.todopublish.ui.screens.task.topbar.TaskTopBar
 import com.kay.todopublish.ui.screens.task.viewmodel.TaskViewModel
-import com.kay.todopublish.util.Action
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun TaskScreen(
     taskId: Int,
-    navigateToListScreen: (Action) -> Unit,
+    navigateToListScreen: (/*Action*/) -> Unit,
 ) {
     val taskViewModel: TaskViewModel = hiltViewModel()
     val taskViewState = taskViewModel.taskViewState
@@ -37,7 +36,13 @@ fun TaskScreen(
             TaskTopBar(
                 selectedTask = taskViewState.selectedTask,
                 navigateToListScreen = { action ->
-                    if (action == Action.NO_ACTION) {
+                    taskViewModel.navigationHandling(
+                        action = action,
+                        navigateToListScreen = navigateToListScreen,
+                        context = context
+                    )
+                    //taskViewModel.actionManageHandling(action)
+                    /*if (action == Action.NO_ACTION) {
                         navigateToListScreen(action)
                     } else {
                         if (taskViewModel.validateFields()) {
@@ -46,7 +51,7 @@ fun TaskScreen(
                         } else {
                             taskViewModel.displayToast(context = context)
                         }
-                    }
+                    }*/
                 },
             )
         },

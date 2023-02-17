@@ -29,11 +29,12 @@ import com.kay.todopublish.ui.theme.taskItemTextColor
 @OptIn(ExperimentalMaterialApi::class) // Surface
 @Composable
 fun TaskItem(
+    modifier: Modifier = Modifier,
     taskData: TaskData,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
         color = MaterialTheme.colors.taskItemBackgroundColor,
         shape = RectangleShape,

@@ -1,8 +1,6 @@
 package com.kay.todopublish.navigation
 
 import androidx.navigation.NavHostController
-import com.kay.todopublish.util.Action
-import com.kay.todopublish.util.Constants.LIST_SCREEN
 
 // Class which handle our navigation
 class ScreenController(navController: NavHostController) {
@@ -12,13 +10,14 @@ class ScreenController(navController: NavHostController) {
     }
 
     /** TASK-SCREEN TO LIST-SCREEN (Task Route)*/
-    val list: (Action) -> Unit = { action ->
+    val list: (/*Action*/) -> Unit = { // action ->
         // make our Enum action to navigate
-        navController.navigate("list/${action.name}") {
+        navController.popBackStack()
+        /*navigate("list/${action.name}") {
             // Define which destination we are going to.
             popUpTo(LIST_SCREEN) {
                 inclusive = true
             } /*Whenever we navigate from our task  to our list, we pop up to our list screen */
-        }
+        }*/
     }
 }

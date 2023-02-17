@@ -1,6 +1,5 @@
 package com.kay.todopublish.navigation
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
@@ -10,7 +9,6 @@ import com.kay.todopublish.navigation.destinations.taskComposable
 import com.kay.todopublish.util.Constants.LIST_SCREEN
 
 // Settings for our navigation
-@SuppressLint("RememberReturnType")
 @Composable
 fun NavigationSetup(
     navController: NavHostController,
