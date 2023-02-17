@@ -48,11 +48,7 @@ class TaskViewModel @Inject constructor(
 
     /** == VIEW-EFFECTS ==*/
 
-    private val viewEffects = ViewEffects<TaskViewEffects>()
-
-    sealed interface TaskViewEffects {
-        object Navigate : TaskViewEffects
-    }
+    val viewEffects = ViewEffects<TaskViewEffects>()
 
     // Create, Read, Update, Delete
     fun getSelectedTask(taskId: Int) {
@@ -64,40 +60,28 @@ class TaskViewModel @Inject constructor(
         }
     }
 
-    private fun manageDatabaseAction(action: Action) {
-        when (action) {
-            Action.ADD -> {
-                addTask()
-            }
-            Action.UPDATE -> {
-                updateTask()
-            }
-            Action.DELETE -> {
-                deleteSingleTask()
-            }
-            Action.DELETE_ALL -> {}
-            Action.UNDO -> {}
-            else -> {}
-        }
-        viewEffects.send(TaskViewEffects.Navigate)
-        this.actionTaskScreen = Action.NO_ACTION
-        // render()
-    }
+    fun handleAction(action: Action) {
+        if (validateFields()) {
+            when (action) {
+                Action.ADD -> {
+                    addTask()
+                }
 
-    fun navigationHandling(
-        action: Action,
-        navigateToListScreen: () -> Unit,
-        context: Context
-    ) {
-        if (action == Action.NO_ACTION) {
-            navigateToListScreen()
-        } else {
-            if (validateFields()) {
-                manageDatabaseAction(action)
-                navigateToListScreen()
-            } else {
-                displayToast(context = context)
+                Action.UPDATE -> {
+                    updateTask()
+                }
+
+                Action.DELETE -> {
+                    deleteSingleTask()
+                }
+
+                else -> {
+                    // no database operation, just navigate back
+                }
             }
+            viewEffects.send(TaskViewEffects.NavigateBack)
+        } else {
+            viewEffects.send(TaskViewEffects.DisplayErrorToast)
         }
     }
 
@@ -185,13 +169,9 @@ class TaskViewModel @Inject constructor(
     private fun validateFields(): Boolean {
         return title.isNotEmpty() && description.isNotEmpty()
     }
+}
 
-    // A Toast warning if fields are empty in the task screen
-    private fun displayToast(context: Context) {
-        Toast.makeText(
-            context,
-            "Text fields empty, please fill in the title and the description",
-            Toast.LENGTH_SHORT
-        ).show()
-    }
+sealed interface TaskViewEffects {
+    object NavigateBack : TaskViewEffects
+    object DisplayErrorToast: TaskViewEffects
 }

@@ -1,13 +1,17 @@
 package com.kay.todopublish.ui.screens.task
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.kay.todopublish.ui.ViewEffects
 import com.kay.todopublish.ui.screens.task.topbar.TaskTopBar
+import com.kay.todopublish.ui.screens.task.viewmodel.TaskViewEffects
 import com.kay.todopublish.ui.screens.task.viewmodel.TaskViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -30,28 +34,20 @@ fun TaskScreen(
         }
     }
 
+    ViewEffects(taskViewModel.viewEffects){
+        when(it){
+            TaskViewEffects.NavigateBack -> navigateToListScreen()
+            TaskViewEffects.DisplayErrorToast -> displayToast(context)
+        }
+    }
+
     Log.d("TASK_SCREEN", "$selectedTask")
     Scaffold(
         topBar = {
             TaskTopBar(
                 selectedTask = taskViewState.selectedTask,
                 navigateToListScreen = { action ->
-                    taskViewModel.navigationHandling(
-                        action = action,
-                        navigateToListScreen = navigateToListScreen,
-                        context = context
-                    )
-                    //taskViewModel.actionManageHandling(action)
-                    /*if (action == Action.NO_ACTION) {
-                        navigateToListScreen(action)
-                    } else {
-                        if (taskViewModel.validateFields()) {
-                            taskViewModel.databaseActionsManage(action)
-                            navigateToListScreen(action)
-                        } else {
-                            taskViewModel.displayToast(context = context)
-                        }
-                    }*/
+                    taskViewModel.handleAction(action = action)
                 },
             )
         },
@@ -66,4 +62,12 @@ fun TaskScreen(
             )
         }
     )
+}
+
+private fun displayToast(context: Context) {
+    Toast.makeText(
+        context,
+        "Text fields empty, please fill in the title and the description",
+        Toast.LENGTH_SHORT
+    ).show()
 }
