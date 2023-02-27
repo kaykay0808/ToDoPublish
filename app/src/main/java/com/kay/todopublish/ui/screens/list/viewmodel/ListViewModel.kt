@@ -152,9 +152,9 @@ class ListViewModel @Inject constructor(
         } else if (currentList.isEmpty()) {
             actionForSnackBar = Action.NO_ACTION
         } else if (currentList.size > updatedList.size) {
-            actionForSnackBar = Action.ADD
-        } else if (currentList.size < updatedList.size) {
             actionForSnackBar = Action.DELETE
+        } else if (currentList.size < updatedList.size) {
+            actionForSnackBar = Action.ADD
         } else {
             actionForSnackBar = Action.UPDATE
         }

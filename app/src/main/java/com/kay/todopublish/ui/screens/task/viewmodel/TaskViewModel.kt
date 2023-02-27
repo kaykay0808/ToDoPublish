@@ -2,7 +2,6 @@ package com.kay.todopublish.ui.screens.task.viewmodel
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -48,11 +47,11 @@ class TaskViewModel @Inject constructor(
 
     /** == VIEW-EFFECTS ==*/
 
-    private val viewEffects = ViewEffects<TaskViewEffects>()
+    val viewEffects = ViewEffects<TaskViewEffects>() // Sealed Class.
 
-    sealed interface TaskViewEffects {
+    /*sealed interface TaskViewEffects {
         object Navigate : TaskViewEffects
-    }
+    }*/
 
     // Create, Read, Update, Delete
     fun getSelectedTask(taskId: Int) {
@@ -64,25 +63,32 @@ class TaskViewModel @Inject constructor(
         }
     }
 
-    private fun manageDatabaseAction(action: Action) {
-        when (action) {
-            Action.ADD -> {
-                addTask()
+    // Change name from manageDatabaseAction to handleAction
+    fun manageDatabaseAction(action: Action) {
+        if (validateFields()) {
+            when (action) {
+                Action.ADD -> {
+                    addTask()
+                }
+                Action.UPDATE -> {
+                    updateTask()
+                }
+                Action.DELETE -> {
+                    deleteSingleTask()
+                }
+                /*Action.DELETE_ALL -> {}
+                Action.UNDO -> {}*/
+                else -> {/* No database operation, just navigate back */
+                }
             }
-            Action.UPDATE -> {
-                updateTask()
-            }
-            Action.DELETE -> {
-                deleteSingleTask()
-            }
-            Action.DELETE_ALL -> {}
-            Action.UNDO -> {}
-            else -> {}
+            // this.actionTaskScreen = Action.NO_ACTION
+            // render()
+            viewEffects.send(TaskViewEffects.NavigateBack)
+        } else {
+            viewEffects.send(TaskViewEffects.DisplayErrorToast)
         }
-        viewEffects.send(TaskViewEffects.Navigate)
-        this.actionTaskScreen = Action.NO_ACTION
-        // render()
     }
+
 
     fun navigationHandling(
         action: Action,
@@ -96,7 +102,7 @@ class TaskViewModel @Inject constructor(
                 manageDatabaseAction(action)
                 navigateToListScreen()
             } else {
-                displayToast(context = context)
+                // displayToast(context = context)
             }
         }
     }
@@ -185,13 +191,9 @@ class TaskViewModel @Inject constructor(
     private fun validateFields(): Boolean {
         return title.isNotEmpty() && description.isNotEmpty()
     }
+}
 
-    // A Toast warning if fields are empty in the task screen
-    private fun displayToast(context: Context) {
-        Toast.makeText(
-            context,
-            "Text fields empty, please fill in the title and the description",
-            Toast.LENGTH_SHORT
-        ).show()
-    }
+sealed interface TaskViewEffects {
+    object NavigateBack : TaskViewEffects
+    object DisplayErrorToast : TaskViewEffects
 }
