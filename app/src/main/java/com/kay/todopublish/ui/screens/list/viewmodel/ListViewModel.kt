@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.data.repository.ToDoRepository
+import com.kay.todopublish.ui.ViewEffects
 import com.kay.todopublish.util.Action
 import com.kay.todopublish.util.CloseIconState
 import com.kay.todopublish.util.RequestState
@@ -49,6 +50,8 @@ class ListViewModel @Inject constructor(
             actionForSnackBar = actionForSnackBar
         )
     }
+
+    val viewEffects = ViewEffects<ListViewEffect>()
 
     // Get All Task
     // private val _allTask = List<TaskData>(emptyList())
@@ -147,17 +150,26 @@ class ListViewModel @Inject constructor(
     }
 
     private fun manageActions(updatedList: List<TaskData>) {
-        if (updatedList.isEmpty()) {
-            actionForSnackBar = Action.DELETE_ALL
+        val actionForSnackBar = if (updatedList.isEmpty()) {
+            Action.DELETE_ALL
         } else if (currentList.isEmpty()) {
-            actionForSnackBar = Action.NO_ACTION
+            Action.NO_ACTION
         } else if (currentList.size > updatedList.size) {
-            actionForSnackBar = Action.DELETE
+            Action.DELETE
         } else if (currentList.size < updatedList.size) {
-            actionForSnackBar = Action.ADD
+            Action.ADD
         } else {
-            actionForSnackBar = Action.UPDATE
+            Action.UPDATE
         }
+
+        viewEffects.send(
+            ListViewEffect.ShowSnackBar(
+                action = actionForSnackBar,
+                message = setMessage(actionForSnackBar)
+            )
+        )
+
+
 
 
         // if "the old" is similar to "current list" Then {
@@ -199,4 +211,8 @@ class ListViewModel @Inject constructor(
         this.actionForSnackBar = Action.NO_ACTION
         render()
     }
+}
+
+sealed interface ListViewEffect {
+    data class ShowSnackBar(val action: Action, val message: String) : ListViewEffect
 }

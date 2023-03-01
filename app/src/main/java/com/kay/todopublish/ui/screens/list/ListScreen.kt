@@ -6,23 +6,21 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kay.todopublish.R
+import com.kay.todopublish.ui.ViewEffects
 import com.kay.todopublish.ui.screens.list.topbar.ListTopBar
+import com.kay.todopublish.ui.screens.list.viewmodel.ListViewEffect
 import com.kay.todopublish.ui.screens.list.viewmodel.ListViewModel
 import com.kay.todopublish.ui.theme.floatingActionButtonBackgroundColor
 import com.kay.todopublish.util.Action
 import com.kay.todopublish.util.CloseIconState
-import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -34,18 +32,21 @@ fun ListScreen(
     val viewState = listViewModel.viewState
     val allTask = viewState.allTask
     val scaffoldState = rememberScaffoldState()
-    /*var actionChange by remember(action) {
-        mutableStateOf(action)
-    }*/
+
     // Log.d("LIST_ACTION", "$action")
 
-    DisplaySnackBar(
-        scaffoldState = scaffoldState,
-        // handleDatabaseAction = {listViewModel.databaseActionManageList(action = action)},
-        action = viewState.actionForSnackBar,
-        // databaseActionManageList = { listViewModel.databaseActionManageList(action = viewState.actionForSnackBar) },
-        message = listViewModel.setMessage(action = viewState.actionForSnackBar)
-    )
+    ViewEffects(listViewModel.viewEffects) {
+        when (it) {
+            is ListViewEffect.ShowSnackBar -> if (it.action != Action.NO_ACTION) {
+                val snackBarResult = scaffoldState.snackbarHostState.showSnackbar(
+                    message = it.message,
+                    actionLabel = "Ok"
+                )
+            }
+        }
+        Log.d("SNACK_BAR_ACTION_INSIDE", "$it")
+    }
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -87,6 +88,13 @@ fun ListScreen(
                 searchAppBarState = viewState.searchAppBarState,
                 navigateToTaskScreen = navigateToTaskScreen
             )
+            /*DisplaySnackBar(
+                scaffoldState = scaffoldState,
+                action = viewState.actionForSnackBar,
+                message = listViewModel.setMessage(action = viewState.actionForSnackBar),
+                // handleDatabaseAction = {listViewModel.databaseActionManageList(action = action)},
+                // databaseActionManageList = { listViewModel.databaseActionManageList(action = viewState.actionForSnackBar) },
+            )*/
         },
         floatingActionButton = {
             ListFloatingActionButton(onFloatingActionButtonClicked = navigateToTaskScreen)
@@ -111,27 +119,27 @@ fun ListFloatingActionButton(onFloatingActionButtonClicked: (taskId: Int) -> Uni
     }
 }
 
-@Composable
+/*@Composable
 fun DisplaySnackBar(
     scaffoldState: ScaffoldState,
-    // databaseActionManageList: () -> Unit,
-    // taskTitle: String,
     action: Action,
     message: String
+    // databaseActionManageList: () -> Unit,
+    // taskTitle: String,
     // onUndoClicked: (Action) -> Unit,
     // listViewModel: ListViewModel
 ) {
-    Log.d("SNACKBAR_ACTION","$action")
+    Log.d("SNACK_BAR_ACTION", "$action")
     // databaseActionManageList()
-    val scope = rememberCoroutineScope()
+    // val scope = rememberCoroutineScope()
     LaunchedEffect(key1 = action) {
-        scope.launch {
-            if (action != Action.NO_ACTION) {
-                val snackBarResult = scaffoldState.snackbarHostState.showSnackbar(
-                    message = message,
-                    actionLabel = "Ok"
-                )
-            }
+        Log.d("SNACK_BAR_ACTION_INSIDE", "$action")
+        if (action != Action.NO_ACTION) {
+            val snackBarResult = scaffoldState.snackbarHostState.showSnackbar(
+                message = message,
+                actionLabel = "Ok"
+            )
         }
+        // scope.launch {}
     }
-}
+}*/
