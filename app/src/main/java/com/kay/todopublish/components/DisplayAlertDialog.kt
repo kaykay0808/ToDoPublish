@@ -3,6 +3,7 @@ package com.kay.todopublish.components
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
@@ -36,18 +37,18 @@ fun DisplayAlertDialog(
             },
             // Positive button
             confirmButton = {
-                           Button(
-                               onClick = {
-                                   onYesClicked()
-                                   closeDialog()
-                               }
-                           ) {
-                               Text(text = stringResource(id = R.string.yes))
-                           }
+                Button(
+                    onClick = {
+                        onYesClicked()
+                        closeDialog()
+                    }
+                ) {
+                    Text(text = stringResource(id = R.string.yes))
+                }
             },
             // Negative Button
             dismissButton = {
-                Button(
+                OutlinedButton(
                     onClick = { closeDialog() }
                 ) {
                     Text(text = stringResource(id = R.string.no))
