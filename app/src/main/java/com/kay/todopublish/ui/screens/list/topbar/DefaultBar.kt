@@ -57,6 +57,11 @@ fun DefaultBarActions(
     onSortIconClicked: (Priority) -> Unit,
     onDeleteAllIconClicked: () -> Unit
 ) {
+    var openAlertDialog by remember {
+        mutableStateOf(false)
+    }
+    // DisplayAlertDialog()
+
     // Calling our 3 action functions which we Define in our 3 different functions
     SearchAction(onSearchIconClicked = onSearchIconClicked)
     SortAction(onSortIconClicked = onSortIconClicked)

@@ -105,6 +105,7 @@ class ListViewModel @Inject constructor(
         mutableStateOf(SearchAppBarState.CLOSED)*/
     // val searchTextState: MutableState<String> = mutableStateOf("")
 
+    /** ------- search app bar states -------*/
     fun openSearchBar() {
         searchAppBarState = SearchAppBarState.OPENED
         render()
@@ -135,7 +136,7 @@ class ListViewModel @Inject constructor(
         render()
     }
 
-    fun setMessage(action: Action): String {
+    private fun setMessage(action: Action): String {
         return when (action) {
             Action.DELETE_ALL -> "All Task Removed"
             else -> {

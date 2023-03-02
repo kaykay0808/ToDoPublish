@@ -25,4 +25,8 @@
     <string name="title">Title</string>
     <string name="description">Description</string>
 
+    <!-- Alert Dialog Box -->
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+
 </resources>
