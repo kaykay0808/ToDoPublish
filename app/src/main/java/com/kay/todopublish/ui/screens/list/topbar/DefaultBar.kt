@@ -20,18 +20,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.kay.todopublish.R
+import com.kay.todopublish.components.DisplayAlertDialog
 import com.kay.todopublish.components.PriorityItem
 import com.kay.todopublish.data.models.Priority
 import com.kay.todopublish.ui.theme.LARGE_PADDING
 import com.kay.todopublish.ui.theme.Typography
 import com.kay.todopublish.ui.theme.topAppBarBackgroundColor
 import com.kay.todopublish.ui.theme.topAppBarContentColor
+import com.kay.todopublish.util.Action
 
 @Composable
 fun DefaultListAppBar(
     onSearchIconClicked: () -> Unit,
     onSortIconClicked: (Priority) -> Unit,
-    onDeleteAllIconClicked: () -> Unit
+    onDeleteAllConfirmed: () -> Unit
 ) {
     TopAppBar(
         title = {
@@ -44,7 +46,7 @@ fun DefaultListAppBar(
             DefaultBarActions(
                 onSearchIconClicked = onSearchIconClicked,
                 onSortIconClicked = onSortIconClicked,
-                onDeleteAllIconClicked = onDeleteAllIconClicked
+                onDeleteAllConfirmed = onDeleteAllConfirmed
             )
         },
         backgroundColor = MaterialTheme.colors.topAppBarBackgroundColor
@@ -55,17 +57,23 @@ fun DefaultListAppBar(
 fun DefaultBarActions(
     onSearchIconClicked: () -> Unit,
     onSortIconClicked: (Priority) -> Unit,
-    onDeleteAllIconClicked: () -> Unit
+    onDeleteAllConfirmed: () -> Unit
 ) {
     var openAlertDialog by remember {
         mutableStateOf(false)
     }
-    // DisplayAlertDialog()
+    DisplayAlertDialog(
+        title = stringResource(id = R.string.delete_all_task),
+        dialogMessage = stringResource(id = R.string.delete_all_task_confirmation),
+        openAlertDialog = openAlertDialog,
+        closeDialog = { openAlertDialog = false },
+        onYesClicked = { onDeleteAllConfirmed() }
+    )
 
     // Calling our 3 action functions which we Define in our 3 different functions
     SearchAction(onSearchIconClicked = onSearchIconClicked)
     SortAction(onSortIconClicked = onSortIconClicked)
-    DeleteAllAction(onDeleteAllIconClicked = onDeleteAllIconClicked)
+    DeleteAllAction(onDeleteAllIconClicked = {openAlertDialog = true})
 }
 
 // Actions.
@@ -184,6 +192,6 @@ fun DefaultAppBarPreview() {
     DefaultListAppBar(
         onSearchIconClicked = {},
         onSortIconClicked = {},
-        onDeleteAllIconClicked = {}
+        onDeleteAllConfirmed = {}
     )
 }

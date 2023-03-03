@@ -11,7 +11,7 @@ fun ListTopBar(
     onCloseIconClicked: () -> Unit,
     onSearchImeClicked: (String) -> Unit,
     onSearchTextChange: (String) -> Unit,
-    onDeleteAllIconClicked: () -> Unit
+    onDeleteAllConfirmed: () -> Unit
     // toDoViewModel: ToDoViewModel,
     // searchAppBarState: SearchAppBarState,
     // searchTextState: String // ->
@@ -21,7 +21,7 @@ fun ListTopBar(
             DefaultListAppBar(
                 onSearchIconClicked = onSearchIconClicked, // { toDoViewModel.openSearchBar() },
                 onSortIconClicked = {},
-                onDeleteAllIconClicked = onDeleteAllIconClicked
+                onDeleteAllConfirmed = onDeleteAllConfirmed
             )
         }
         else -> {

@@ -75,7 +75,7 @@ fun ListScreen(
                 onSearchTextChange = { onNewTextEdit ->
                     listViewModel.newInputTextChange(onNewTextEdit)
                 },
-                onDeleteAllIconClicked = {
+                onDeleteAllConfirmed = {
                     listViewModel.deleteAllTask()
                     listViewModel.setActions()
                 }
