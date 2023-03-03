@@ -170,9 +170,6 @@ class ListViewModel @Inject constructor(
             )
         )
 
-
-
-
         // if "the old" is similar to "current list" Then {
         // -> set the action to update.
         // else Current list is bigger then the old list then {

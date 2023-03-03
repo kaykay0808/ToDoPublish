@@ -25,7 +25,7 @@ import com.kay.todopublish.util.CloseIconState
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ListScreen(
-    navigateToTaskScreen: (taskId: Int) -> Unit,
+    navigateToTaskScreen: (taskId: Int) -> Unit
     // action: Action
 ) {
     val listViewModel: ListViewModel = hiltViewModel()

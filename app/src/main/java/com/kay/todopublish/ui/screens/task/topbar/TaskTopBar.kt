@@ -7,7 +7,7 @@ import com.kay.todopublish.util.Action
 @Composable
 fun TaskTopBar(
     selectedTask: TaskData?,
-    navigateToListScreen: (Action) -> Unit,
+    navigateToListScreen: (Action) -> Unit
 ) {
     if (selectedTask == null) {
         NewTaskTopBar(navigateToListScreen = navigateToListScreen)

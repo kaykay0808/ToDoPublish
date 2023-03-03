@@ -11,7 +11,7 @@ import com.kay.todopublish.util.Constants.LIST_SCREEN
 // Settings for our navigation
 @Composable
 fun NavigationSetup(
-    navController: NavHostController,
+    navController: NavHostController
     // toDoViewModel: ToDoViewModel
 ) {
     // save our backstack
@@ -26,7 +26,7 @@ fun NavigationSetup(
     ) {
         // Define our composable build (we will create our custom destination instead of define our composable below)
         listComposable(
-            navigateToTaskScreen = screenDestination.task,
+            navigateToTaskScreen = screenDestination.task
             // toDoViewModel = toDoViewModel
         )
         taskComposable(

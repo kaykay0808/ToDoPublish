@@ -14,6 +14,6 @@ data class ListViewState(
     // Room
     val allTask: RequestState<List<TaskData>> = RequestState.Idle, // List<TaskData> = emptyList()
     val actionForSnackBar: Action = Action.NO_ACTION,
-    val searchTask: RequestState<List<TaskData>> = RequestState.Idle,
+    val searchTask: RequestState<List<TaskData>> = RequestState.Idle
     // val titleFromTaskScreen: String = ""
 )

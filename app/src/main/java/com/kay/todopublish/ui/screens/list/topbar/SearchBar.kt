@@ -37,7 +37,7 @@ fun SearchAppBar(
     textSearchInput: String,
     onSearchTextChange: (String) -> Unit,
     onCloseIconClicked: () -> Unit,
-    onSearchImeClicked: (String) -> Unit, // When we actually search something (on the app keyboard)
+    onSearchImeClicked: (String) -> Unit // When we actually search something (on the app keyboard)
     // viewState: ToDoViewState,
 ) {
     // A controller that makes the keyboard close after we click the searchButton
@@ -95,7 +95,7 @@ fun SearchAppBar(
                 onSearch = {
                     onSearchImeClicked(textSearchInput)
                     keyboardController?.hide()
-                },
+                }
             ),
             colors = TextFieldDefaults.textFieldColors(
                 cursorColor = MaterialTheme.colors.topAppBarContentColor,

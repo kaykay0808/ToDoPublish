@@ -5,7 +5,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.util.RequestState
 import com.kay.todopublish.util.SearchAppBarState

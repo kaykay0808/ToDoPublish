@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
                 // initiate navController
                 navController = rememberNavController()
                 NavigationSetup(
-                    navController = navController,
+                    navController = navController
                     // toDoViewModel = toDoViewModel
                 )
             }

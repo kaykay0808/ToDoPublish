@@ -18,7 +18,7 @@ import com.kay.todopublish.util.Action
 
 @Composable
 fun NewTaskTopBar(
-    navigateToListScreen: (Action) -> Unit,
+    navigateToListScreen: (Action) -> Unit
 ) {
     // Set Default state?
 

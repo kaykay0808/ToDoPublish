@@ -78,7 +78,7 @@ class TaskViewModel @Inject constructor(
                 }
                 /*Action.DELETE_ALL -> {}
                 Action.UNDO -> {}*/
-                else -> {/* No database operation, just navigate back */
+                else -> { /* No database operation, just navigate back */
                 }
             }
             // this.actionTaskScreen = Action.NO_ACTION
@@ -88,7 +88,6 @@ class TaskViewModel @Inject constructor(
             viewEffects.send(TaskViewEffects.DisplayErrorToast)
         }
     }
-
 
     fun navigationHandling(
         action: Action,

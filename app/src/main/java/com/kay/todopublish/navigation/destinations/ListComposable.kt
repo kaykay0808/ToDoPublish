@@ -11,7 +11,7 @@ import com.kay.todopublish.util.Constants.LIST_SCREEN
 import com.kay.todopublish.util.toAction
 
 fun NavGraphBuilder.listComposable(
-    navigateToTaskScreen: (taskId: Int) -> Unit,
+    navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
     composable(
         route = LIST_SCREEN,
@@ -25,7 +25,7 @@ fun NavGraphBuilder.listComposable(
         Log.d("ListComposable", action.name)
         ListScreen(
             // action = action,
-            navigateToTaskScreen = navigateToTaskScreen,
+            navigateToTaskScreen = navigateToTaskScreen
         )
     }
 }

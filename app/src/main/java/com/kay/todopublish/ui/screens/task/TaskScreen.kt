@@ -18,7 +18,7 @@ import com.kay.todopublish.ui.screens.task.viewmodel.TaskViewModel
 @Composable
 fun TaskScreen(
     taskId: Int,
-    navigateToListScreen: (/*Action*/) -> Unit,
+    navigateToListScreen: (/*Action*/) -> Unit
 ) {
     val taskViewModel: TaskViewModel = hiltViewModel()
     val taskViewState = taskViewModel.taskViewState
@@ -34,8 +34,8 @@ fun TaskScreen(
         }
     }
 
-    ViewEffects(taskViewModel.viewEffects){
-        when(it) {
+    ViewEffects(taskViewModel.viewEffects) {
+        when (it) {
             TaskViewEffects.NavigateBack -> navigateToListScreen()
             TaskViewEffects.DisplayErrorToast -> displayToast(context = context)
         }
@@ -52,7 +52,7 @@ fun TaskScreen(
                         // navigateToListScreen = navigateToListScreen,
                         // context = context
                     )
-                    //taskViewModel.actionManageHandling(action)
+                    // taskViewModel.actionManageHandling(action)
                     /*if (action == Action.NO_ACTION) {
                         navigateToListScreen(action)
                     } else {
@@ -63,7 +63,7 @@ fun TaskScreen(
                             taskViewModel.displayToast(context = context)
                         }
                     }*/
-                },
+                }
             )
         },
         content = {
