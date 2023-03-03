@@ -27,7 +27,6 @@ import com.kay.todopublish.ui.theme.LARGE_PADDING
 import com.kay.todopublish.ui.theme.Typography
 import com.kay.todopublish.ui.theme.topAppBarBackgroundColor
 import com.kay.todopublish.ui.theme.topAppBarContentColor
-import com.kay.todopublish.util.Action
 
 @Composable
 fun DefaultListAppBar(
@@ -73,7 +72,7 @@ fun DefaultBarActions(
     // Calling our 3 action functions which we Define in our 3 different functions
     SearchAction(onSearchIconClicked = onSearchIconClicked)
     SortAction(onSortIconClicked = onSortIconClicked)
-    DeleteAllAction(onDeleteAllIconClicked = {openAlertDialog = true})
+    DeleteAllAction(onDeleteAllIconClicked = { openAlertDialog = true })
 }
 
 // Actions.
