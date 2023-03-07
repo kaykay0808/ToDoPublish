@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kay.todopublish.data.models.TaskData
+import com.kay.todopublish.data.repository.DataStoreRepository
 import com.kay.todopublish.data.repository.ToDoRepository
 import com.kay.todopublish.ui.ViewEffects
 import com.kay.todopublish.util.Action
@@ -20,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ListViewModel @Inject constructor(
-    private val repository: ToDoRepository
+    private val repository: ToDoRepository,
+    private val dataStoreRepository: DataStoreRepository /*( ← Inject DataStore Repository )*/
 ) : ViewModel() {
 
     private var currentList: List<TaskData> = emptyList()

@@ -18,6 +18,7 @@ fun DisplayAlertDialog(
     closeDialog: () -> Unit,
     onYesClicked: () -> Unit
 ) {
+    // Whenever the dialog is true (open)
     if (openAlertDialog) {
         AlertDialog(
             title = {
@@ -39,6 +40,8 @@ fun DisplayAlertDialog(
             confirmButton = {
                 Button(
                     onClick = {
+                        // onYesClicked will trigger {navigateToListScreen(Action.DELETE)} from ExistingTaskTopBar (TaskScreen)
+                        // and {onDeleteAllConfirmed()}
                         onYesClicked()
                         closeDialog()
                     }
