@@ -75,6 +75,7 @@ fun ListScreen(
                 onSearchTextChange = { onNewTextEdit ->
                     listViewModel.newInputTextChange(onNewTextEdit)
                 },
+                onSortIconClicked = { listViewModel.persistSortState(it) },
                 onDeleteAllConfirmed = {
                     listViewModel.deleteAllTask()
                     listViewModel.setActions()

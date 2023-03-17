@@ -1,6 +1,7 @@
 package com.kay.todopublish.ui.screens.list.topbar
 
 import androidx.compose.runtime.Composable
+import com.kay.todopublish.data.models.Priority
 import com.kay.todopublish.ui.screens.list.viewmodel.ListViewState
 import com.kay.todopublish.util.SearchAppBarState
 
@@ -8,6 +9,7 @@ import com.kay.todopublish.util.SearchAppBarState
 fun ListTopBar(
     viewState: ListViewState,
     onSearchIconClicked: () -> Unit,
+    onSortIconClicked: (Priority) -> Unit,
     onCloseIconClicked: () -> Unit,
     onSearchImeClicked: (String) -> Unit,
     onSearchTextChange: (String) -> Unit,
@@ -20,7 +22,7 @@ fun ListTopBar(
         SearchAppBarState.CLOSED -> {
             DefaultListAppBar(
                 onSearchIconClicked = onSearchIconClicked, // { toDoViewModel.openSearchBar() },
-                onSortIconClicked = {},
+                onSortIconClicked = onSortIconClicked,
                 onDeleteAllConfirmed = onDeleteAllConfirmed
             )
         }

@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kay.todopublish.data.models.Priority
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.data.repository.DataStoreRepository
 import com.kay.todopublish.data.repository.ToDoRepository
@@ -16,6 +17,11 @@ import com.kay.todopublish.util.RequestState
 import com.kay.todopublish.util.SearchAppBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,6 +43,47 @@ class ListViewModel @Inject constructor(
     private var allTask: RequestState<List<TaskData>> = RequestState.Idle
     private var searchTask: RequestState<List<TaskData>> = RequestState.Idle
     private var actionForSnackBar = Action.NO_ACTION
+    // private var lowPriorityTask: RequestState<List<TaskData>> = RequestState.Idle
+
+    private val taskFlow = combine(
+        dataStoreRepository.readSortState.map { Priority.valueOf(it) },
+        repository.getAllTask,
+        repository.sortByHighPriority,
+        repository.sortByLowPriority
+    ) { priority, allTask, sortByHighPriority, sortByLowPriority ->
+        when (priority) {
+            Priority.HIGH -> sortByHighPriority
+            Priority.MEDIUM -> allTask
+            Priority.LOW -> sortByLowPriority
+            Priority.NONE -> allTask
+        }
+    }
+
+    init {
+        taskFlow.onEach { updatedList ->
+            allTask = RequestState.Success(updatedList)
+            // Listening updating.
+            manageActions(updatedList)
+            currentList = updatedList
+            render()
+        }.catch {
+            allTask = RequestState.Error(it)
+            render()
+        }.launchIn(viewModelScope)
+    }
+
+    /*/** Priority order states */
+    val lowPriorityTask: StateFlow<List<TaskData>> = repository.sortByLowPriority.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        emptyList()
+    )
+
+    val highPriorityTask: StateFlow<List<TaskData>> = repository.sortByHighPriority.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        emptyList()
+    )*/
 
     init {
         getAllTask()
@@ -50,10 +97,40 @@ class ListViewModel @Inject constructor(
             allTask = allTask,
             searchTask = searchTask,
             actionForSnackBar = actionForSnackBar
+            // lowPriorityTask = lowPriorityTask
         )
     }
 
     val viewEffects = ViewEffects<ListViewEffect>()
+
+    // private val _sortState = MutableStateFlow<RequestState<Priority>>(RequestState.Idle)
+    // val sortState: StateFlow<RequestState<Priority>> = _sortState
+    var sortState: RequestState<Priority> = RequestState.Idle
+
+    fun readSortState() {
+        // _sortState.value = RequestState.Loading
+        sortState = RequestState.Loading
+        render()
+        try {
+            viewModelScope.launch {
+                dataStoreRepository.readSortState
+                    .map { Priority.valueOf(it) }
+                    .collect {
+                        sortState = RequestState.Success(it)
+                    }
+                render()
+            }
+        } catch (e: Exception) {
+            sortState = RequestState.Error(e)
+            render()
+        }
+    }
+
+    fun persistSortState(priority: Priority) {
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStoreRepository.persistSortState(priority = priority)
+        }
+    }
 
     // Get All Task
     // private val _allTask = List<TaskData>(emptyList())
@@ -171,7 +248,6 @@ class ListViewModel @Inject constructor(
                 message = setMessage(actionForSnackBar)
             )
         )
-
         // if "the old" is similar to "current list" Then {
         // -> set the action to update.
         // else Current list is bigger then the old list then {
