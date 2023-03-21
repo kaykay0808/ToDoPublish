@@ -87,6 +87,11 @@ fun ListScreen(
                 allTask = allTask,
                 searchedTask = viewState.searchTask,
                 searchAppBarState = viewState.searchAppBarState,
+                onSwipeToDelete = { action, taskData ->
+                    listViewModel.deleteSingleTaskFromList(taskData = taskData)
+                    // listViewModel.updateListField(selectedTask = taskData)
+
+                },
                 navigateToTaskScreen = navigateToTaskScreen
             )
             /*DisplaySnackBar(

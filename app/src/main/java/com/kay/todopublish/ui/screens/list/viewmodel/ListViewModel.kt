@@ -43,7 +43,13 @@ class ListViewModel @Inject constructor(
     private var allTask: RequestState<List<TaskData>> = RequestState.Idle
     private var searchTask: RequestState<List<TaskData>> = RequestState.Idle
     private var actionForSnackBar = Action.NO_ACTION
-    // private var lowPriorityTask: RequestState<List<TaskData>> = RequestState.Idle
+
+    // SingleTask
+    private var id = 0
+    private var title = ""
+    private var description = ""
+    private var priority = Priority.LOW
+    private var singleTask: TaskData? = null
 
     private val taskFlow = combine(
         dataStoreRepository.readSortState.map { Priority.valueOf(it) },
@@ -96,8 +102,13 @@ class ListViewModel @Inject constructor(
             closeIconState = closeIconState,
             allTask = allTask,
             searchTask = searchTask,
-            actionForSnackBar = actionForSnackBar
-            // lowPriorityTask = lowPriorityTask
+            actionForSnackBar = actionForSnackBar,
+            // Single Task
+            id = id,
+            title = title,
+            description = description,
+            priority = priority,
+            singleTask = singleTask
         )
     }
 
@@ -129,6 +140,20 @@ class ListViewModel @Inject constructor(
     fun persistSortState(priority: Priority) {
         viewModelScope.launch(Dispatchers.IO) {
             dataStoreRepository.persistSortState(priority = priority)
+        }
+    }
+
+    fun getSelectedTask(taskId: Int) {
+        viewModelScope.launch {
+            repository.getSelectedTask(taskId = taskId).collect { task ->
+                singleTask = task // this variable comes from the viewState
+            }
+        }
+    }
+
+    fun deleteSingleTaskFromList(taskData: TaskData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteTask(taskData = taskData)
         }
     }
 
@@ -258,6 +283,13 @@ class ListViewModel @Inject constructor(
         // -> set the action to delete all
     }
 
+    /*fun updateListField(selectedTask: TaskData?) {
+        if (selectedTask != null) {
+            deleteSingleTaskFromList()
+            render()
+        }
+    }*/
+
     fun returningActionToString(action: Action): String {
         return if (action.name == "DELETE") {
             "UNDO"
@@ -276,10 +308,13 @@ class ListViewModel @Inject constructor(
         }
     }
 
-    fun databaseActionManageList(action: Action) {
+    fun manageDatabaseActionList(action: Action) {
         when (action) {
             Action.DELETE_ALL -> {
                 deleteAllTask()
+            }
+            Action.DELETE -> {
+                // deleteSingleTaskFromList()
             }
             Action.UNDO -> {}
             else -> {}

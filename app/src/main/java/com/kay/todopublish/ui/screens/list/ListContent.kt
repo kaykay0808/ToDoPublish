@@ -1,19 +1,33 @@
 package com.kay.todopublish.ui.screens.list
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.DismissDirection
+import androidx.compose.material.DismissValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FractionalThreshold
+import androidx.compose.material.SwipeToDismiss
+import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.kay.todopublish.data.models.TaskData
+import com.kay.todopublish.util.Action
 import com.kay.todopublish.util.RequestState
 import com.kay.todopublish.util.SearchAppBarState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun ListContent(
     allTask: RequestState<List<TaskData>>,
     searchedTask: RequestState<List<TaskData>>,
     searchAppBarState: SearchAppBarState,
+    onSwipeToDelete: (Action, TaskData) -> Unit,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
     // Logic that decide if we are going to display "searched task" or "all task"
@@ -22,6 +36,7 @@ fun ListContent(
         if (searchedTask is RequestState.Success) {
             HandleListContentState(
                 taskFromList = searchedTask.data,
+                onSwipeToDelete = onSwipeToDelete,
                 navigateToTaskScreen = navigateToTaskScreen
             )
         }
@@ -34,6 +49,7 @@ fun ListContent(
                 /** All task shown */
                 DisplayTask(
                     taskFromList = allTask.data,
+                    onSwipeToDelete = onSwipeToDelete,
                     navigateToTaskScreen = navigateToTaskScreen
                 )
             }
@@ -44,6 +60,7 @@ fun ListContent(
 @Composable
 fun HandleListContentState(
     taskFromList: List<TaskData>,
+    onSwipeToDelete: (Action, TaskData) -> Unit,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
     if (taskFromList.isEmpty()) {
@@ -51,16 +68,18 @@ fun HandleListContentState(
     } else {
         DisplayTask(
             taskFromList = taskFromList,
+            onSwipeToDelete = onSwipeToDelete,
             navigateToTaskScreen = navigateToTaskScreen
         )
     }
 }
 
 // Function that will display task when content is not empty
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun DisplayTask(
     taskFromList: List<TaskData>,
+    onSwipeToDelete: (Action, TaskData) -> Unit,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
     LazyColumn {
@@ -70,10 +89,36 @@ fun DisplayTask(
                 task.id
             }
         ) { task ->
-            TaskItem(
-                modifier = Modifier.animateItemPlacement(),
-                taskData = task,
-                navigateToTaskScreen = navigateToTaskScreen
+            val dismissState = rememberDismissState()
+            val dismissDirection = dismissState.dismissDirection
+            val isDismissed = dismissState.isDismissed(DismissDirection.EndToStart)
+            if (isDismissed && dismissDirection == DismissDirection.EndToStart) {
+                val scope = rememberCoroutineScope()
+                SideEffect {
+                    scope.launch {
+                        delay(300)
+                        onSwipeToDelete(Action.DELETE, task)
+                    }
+                }
+            }
+
+            val degrees by animateFloatAsState(
+                if (dismissState.targetValue == DismissValue.Default) 0f
+                else -45f
+            )
+
+            SwipeToDismiss(
+                state = dismissState,
+                directions = setOf(DismissDirection.EndToStart),
+                dismissThresholds = { FractionalThreshold(fraction = 0.4f) },
+                background = { SwipeRedBackground(degrees = degrees) },
+                dismissContent = {
+                    TaskItem(
+                        modifier = Modifier.animateItemPlacement(),
+                        taskData = task,
+                        navigateToTaskScreen = navigateToTaskScreen
+                    )
+                }
             )
         }
     }
