@@ -3,7 +3,6 @@ package com.kay.todopublish.ui.screens.list
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
@@ -20,17 +19,17 @@ import com.kay.todopublish.ui.theme.EXTRA_LARGE_PADDING
 import com.kay.todopublish.ui.theme.HighPriorityColor
 
 @Composable
-fun SwipeRedBackground(degrees: Float) {
+fun SwipeRedBackground(degrees: Float/*Passing some icon rotation*/) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(HighPriorityColor)
             .padding(horizontal = EXTRA_LARGE_PADDING),
         // assigning an icon position
-    contentAlignment = Alignment.CenterEnd
+        contentAlignment = Alignment.CenterEnd
     ) {
         Icon(
-            modifier = Modifier.rotate(degrees= degrees),
+            modifier = Modifier.rotate(degrees = degrees), // <- Passing some Icon rotation
             imageVector = Icons.Filled.Delete,
             contentDescription = stringResource(id = R.string.delete_icon),
             tint = Color.White

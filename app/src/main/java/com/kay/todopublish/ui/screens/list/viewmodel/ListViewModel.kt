@@ -1,9 +1,11 @@
 package com.kay.todopublish.ui.screens.list.viewmodel
 
+import android.util.Log
 import androidx.compose.material.SnackbarResult
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.input.key.Key.Companion.D
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kay.todopublish.data.models.Priority
@@ -49,8 +51,9 @@ class ListViewModel @Inject constructor(
     private var title = ""
     private var description = ""
     private var priority = Priority.LOW
-    private var singleTask: TaskData? = null
+    private var recentlyDeletedSingleTask: TaskData? = null
 
+    // Reading our priorities order.
     private val taskFlow = combine(
         dataStoreRepository.readSortState.map { Priority.valueOf(it) },
         repository.getAllTask,
@@ -71,6 +74,7 @@ class ListViewModel @Inject constructor(
             // Listening updating.
             manageActions(updatedList)
             currentList = updatedList
+            Log.d("updated_list","$updatedList")
             render()
         }.catch {
             allTask = RequestState.Error(it)
@@ -108,52 +112,17 @@ class ListViewModel @Inject constructor(
             title = title,
             description = description,
             priority = priority,
-            singleTask = singleTask
+            // recentlyDeletedSingleTask = recentlyDeletedSingleTask
         )
     }
 
     val viewEffects = ViewEffects<ListViewEffect>()
 
-    // private val _sortState = MutableStateFlow<RequestState<Priority>>(RequestState.Idle)
-    // val sortState: StateFlow<RequestState<Priority>> = _sortState
-    var sortState: RequestState<Priority> = RequestState.Idle
-
-    fun readSortState() {
-        // _sortState.value = RequestState.Loading
-        sortState = RequestState.Loading
-        render()
-        try {
-            viewModelScope.launch {
-                dataStoreRepository.readSortState
-                    .map { Priority.valueOf(it) }
-                    .collect {
-                        sortState = RequestState.Success(it)
-                    }
-                render()
-            }
-        } catch (e: Exception) {
-            sortState = RequestState.Error(e)
-            render()
-        }
-    }
-
+    // Storing priorities data in to orders.
+    // With this function we are going to pass the priority to the dataStoreRepository.
     fun persistSortState(priority: Priority) {
         viewModelScope.launch(Dispatchers.IO) {
             dataStoreRepository.persistSortState(priority = priority)
-        }
-    }
-
-    fun getSelectedTask(taskId: Int) {
-        viewModelScope.launch {
-            repository.getSelectedTask(taskId = taskId).collect { task ->
-                singleTask = task // this variable comes from the viewState
-            }
-        }
-    }
-
-    fun deleteSingleTaskFromList(taskData: TaskData) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteTask(taskData = taskData)
         }
     }
 
@@ -176,6 +145,19 @@ class ListViewModel @Inject constructor(
         } catch (e: Exception) {
             allTask = RequestState.Error(e)
             render()
+        }
+    }
+
+    private fun addTask() {
+        viewModelScope.launch(Dispatchers.IO) {
+            recentlyDeletedSingleTask?.let { repository.addTask(taskData = it) }
+        }
+    }
+
+    fun deleteSingleTaskFromList(taskData: TaskData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            recentlyDeletedSingleTask = taskData
+            repository.deleteTask(taskData = taskData)
         }
     }
 
@@ -240,18 +222,20 @@ class ListViewModel @Inject constructor(
         render()
     }
 
+    /** ------- SnackBar -------*/
+    fun setActions() {
+        actionForSnackBar = Action.DELETE_ALL
+        render()
+    }
+
     private fun setMessage(action: Action): String {
         return when (action) {
+            // Action.DELETE -> "UNDO"
             Action.DELETE_ALL -> "All Task Removed"
             else -> {
                 "${action.name} Task Done!"
             }
         }
-    }
-
-    fun setActions() {
-        actionForSnackBar = Action.DELETE_ALL
-        render()
     }
 
     private fun manageActions(updatedList: List<TaskData>) {
@@ -263,16 +247,23 @@ class ListViewModel @Inject constructor(
             Action.DELETE
         } else if (currentList.size < updatedList.size) {
             Action.ADD
-        } else {
+        } else if (currentList != updatedList) {
             Action.UPDATE
+        } else {
+            Action.NO_ACTION
         }
 
         viewEffects.send(
             ListViewEffect.ShowSnackBar(
                 action = actionForSnackBar,
-                message = setMessage(actionForSnackBar)
+                message = setMessage(actionForSnackBar),
+                actionLabel = returningActionToString(action = actionForSnackBar),
+                onUndoClicked = {
+                    addTask()
+                }
             )
         )
+
         // if "the old" is similar to "current list" Then {
         // -> set the action to update.
         // else Current list is bigger then the old list then {
@@ -289,6 +280,18 @@ class ListViewModel @Inject constructor(
             render()
         }
     }*/
+
+    private fun undoDeletedTask(
+        action: Action,
+        snackBarResult: SnackbarResult,
+        onUndoClicked: (Action) -> Unit
+    ) {
+        // If we clicked on the actionLabel before the timed out and the action is ACTION.DELETE (figure out where it was set to ACTION.DELETE) (1)
+        // -> it comes from onSwipe
+        if (snackBarResult == SnackbarResult.ActionPerformed && action == Action.DELETE) {
+            onUndoClicked(Action.UNDO)
+        }
+    }
 
     fun returningActionToString(action: Action): String {
         return if (action.name == "DELETE") {
@@ -322,8 +325,36 @@ class ListViewModel @Inject constructor(
         this.actionForSnackBar = Action.NO_ACTION
         render()
     }
+
+    // private val _sortState = MutableStateFlow<RequestState<Priority>>(RequestState.Idle)
+    // val sortState: StateFlow<RequestState<Priority>> = _sortState
+    private var sortState: RequestState<Priority> = RequestState.Idle
+
+    fun readSortState() {
+        // _sortState.value = RequestState.Loading
+        sortState = RequestState.Loading
+        render()
+        try {
+            viewModelScope.launch {
+                dataStoreRepository.readSortState
+                    .map { Priority.valueOf(it) }
+                    .collect {
+                        sortState = RequestState.Success(it)
+                    }
+                render()
+            }
+        } catch (e: Exception) {
+            sortState = RequestState.Error(e)
+            render()
+        }
+    }
 }
 
 sealed interface ListViewEffect {
-    data class ShowSnackBar(val action: Action, val message: String) : ListViewEffect
+    data class ShowSnackBar(
+        val action: Action,
+        val message: String,
+        val actionLabel: String,
+        val onUndoClicked: (Action) -> Unit
+    ) : ListViewEffect
 }

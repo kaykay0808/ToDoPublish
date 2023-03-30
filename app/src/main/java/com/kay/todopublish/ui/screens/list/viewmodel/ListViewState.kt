@@ -21,6 +21,6 @@ data class ListViewState(
     val title: String = "",
     val description: String = "",
     val priority: Priority = Priority.LOW,
-    val singleTask: TaskData? = null
+    // val recentlyDeletedSingleTask: TaskData? = null
 
     )

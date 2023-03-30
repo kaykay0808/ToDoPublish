@@ -36,6 +36,7 @@ class DataStoreRepository @Inject constructor(
     private val dataStore = context.dataStore
 
     // Function for saving or persisting that sort state
+    // Get the priority from our viewModel and extract the name and store it the preference.
     suspend fun persistSortState(priority: Priority) {
         dataStore.edit { preference ->
             preference[PreferenceKeys.sortKey] = priority.name

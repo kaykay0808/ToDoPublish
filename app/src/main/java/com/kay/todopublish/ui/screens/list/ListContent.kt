@@ -11,16 +11,14 @@ import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.util.Action
 import com.kay.todopublish.util.RequestState
 import com.kay.todopublish.util.SearchAppBarState
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun ListContent(
@@ -89,28 +87,30 @@ fun DisplayTask(
                 task.id
             }
         ) { task ->
-            val dismissState = rememberDismissState()
-            val dismissDirection = dismissState.dismissDirection
-            val isDismissed = dismissState.isDismissed(DismissDirection.EndToStart)
-            if (isDismissed && dismissDirection == DismissDirection.EndToStart) {
-                val scope = rememberCoroutineScope()
-                SideEffect {
-                    scope.launch {
-                        delay(300)
-                        onSwipeToDelete(Action.DELETE, task)
-                    }
+            val dismissState =
+                rememberDismissState() // Remember the dismissState of one of the Item in the list.
+            // val scope = rememberCoroutineScope()
+            // Icon rotation animation
+            LaunchedEffect(dismissState) {
+                val dismissDirection = dismissState.dismissDirection
+                val isDismissed = dismissState.isDismissed(DismissDirection.EndToStart)
+                if (isDismissed && dismissDirection == DismissDirection.EndToStart) {
+                    delay(300)
+                    onSwipeToDelete(Action.DELETE, task)
+
                 }
+                // scope.launch {}
             }
-
             val degrees by animateFloatAsState(
-                if (dismissState.targetValue == DismissValue.Default) 0f
-                else -45f
+                if (dismissState.targetValue == DismissValue.Default)
+                    0f
+                else
+                    -45f
             )
-
             SwipeToDismiss(
                 state = dismissState,
-                directions = setOf(DismissDirection.EndToStart),
-                dismissThresholds = { FractionalThreshold(fraction = 0.4f) },
+                directions = setOf(DismissDirection.EndToStart), // specify the direction to dismiss.
+                dismissThresholds = { FractionalThreshold(fraction = 0.4f) }, // Fraction meaning we dismiss the item after 40% of the item
                 background = { SwipeRedBackground(degrees = degrees) },
                 dismissContent = {
                     TaskItem(

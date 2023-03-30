@@ -6,6 +6,7 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarResult
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberScaffoldState
@@ -31,6 +32,7 @@ fun ListScreen(
     val listViewModel: ListViewModel = hiltViewModel()
     val viewState = listViewModel.viewState
     val allTask = viewState.allTask
+    // val recentlyDeletedSingleTask = viewState.recentlyDeletedSingleTask
     val scaffoldState = rememberScaffoldState()
 
     // Log.d("LIST_ACTION", "$action")
@@ -40,8 +42,22 @@ fun ListScreen(
             is ListViewEffect.ShowSnackBar -> if (it.action != Action.NO_ACTION) {
                 val snackBarResult = scaffoldState.snackbarHostState.showSnackbar(
                     message = it.message,
-                    actionLabel = "Ok"
+                    actionLabel = listViewModel.returningActionToString(it.action)//"Ok"
                 )
+                listViewModel.undoDeleteTask(
+                    action = it.action,
+                    snackBarResult = snackBarResult,
+                    onUndoClicked = it.onUndoClicked
+                )
+                /*undoDeletedTask(
+                    action = it.action, // ??
+                    snackBarResult = snackBarResult,
+                    onUndoClicked = {
+                        if (viewState.recentlyDeletedSingleTask != null) {
+                          listViewModel.addTask(viewState.recentlyDeletedSingleTask)
+                        }
+                    }
+                )*/
             }
         }
         Log.d("SNACK_BAR_ACTION_INSIDE", "$it")
@@ -75,7 +91,7 @@ fun ListScreen(
                 onSearchTextChange = { onNewTextEdit ->
                     listViewModel.newInputTextChange(onNewTextEdit)
                 },
-                onSortIconClicked = { listViewModel.persistSortState(it) },
+                onSortIconClicked = { listViewModel.persistSortState(it) }, // Store the order with priorities. (sending priority to the viewModel)
                 onDeleteAllConfirmed = {
                     listViewModel.deleteAllTask()
                     listViewModel.setActions()
@@ -89,6 +105,7 @@ fun ListScreen(
                 searchAppBarState = viewState.searchAppBarState,
                 onSwipeToDelete = { action, taskData ->
                     listViewModel.deleteSingleTaskFromList(taskData = taskData)
+
                     // listViewModel.updateListField(selectedTask = taskData)
 
                 },
