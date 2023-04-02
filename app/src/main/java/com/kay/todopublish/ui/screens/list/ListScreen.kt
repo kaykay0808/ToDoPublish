@@ -1,12 +1,10 @@
 package com.kay.todopublish.ui.screens.list
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarResult
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberScaffoldState
@@ -27,40 +25,26 @@ import com.kay.todopublish.util.CloseIconState
 @Composable
 fun ListScreen(
     navigateToTaskScreen: (taskId: Int) -> Unit
-    // action: Action
 ) {
     val listViewModel: ListViewModel = hiltViewModel()
     val viewState = listViewModel.viewState
     val allTask = viewState.allTask
-    // val recentlyDeletedSingleTask = viewState.recentlyDeletedSingleTask
     val scaffoldState = rememberScaffoldState()
-
-    // Log.d("LIST_ACTION", "$action")
 
     ViewEffects(listViewModel.viewEffects) {
         when (it) {
             is ListViewEffect.ShowSnackBar -> if (it.action != Action.NO_ACTION) {
                 val snackBarResult = scaffoldState.snackbarHostState.showSnackbar(
                     message = it.message,
-                    actionLabel = listViewModel.returningActionToString(it.action)//"Ok"
+                    actionLabel = listViewModel.returningActionToString(it.action) // "Ok"
                 )
-                listViewModel.undoDeleteTask(
+                listViewModel.undoDeletedTask(
                     action = it.action,
                     snackBarResult = snackBarResult,
                     onUndoClicked = it.onUndoClicked
                 )
-                /*undoDeletedTask(
-                    action = it.action, // ??
-                    snackBarResult = snackBarResult,
-                    onUndoClicked = {
-                        if (viewState.recentlyDeletedSingleTask != null) {
-                          listViewModel.addTask(viewState.recentlyDeletedSingleTask)
-                        }
-                    }
-                )*/
             }
         }
-        Log.d("SNACK_BAR_ACTION_INSIDE", "$it")
     }
 
     Scaffold(
@@ -107,17 +91,9 @@ fun ListScreen(
                     listViewModel.deleteSingleTaskFromList(taskData = taskData)
 
                     // listViewModel.updateListField(selectedTask = taskData)
-
                 },
                 navigateToTaskScreen = navigateToTaskScreen
             )
-            /*DisplaySnackBar(
-                scaffoldState = scaffoldState,
-                action = viewState.actionForSnackBar,
-                message = listViewModel.setMessage(action = viewState.actionForSnackBar),
-                // handleDatabaseAction = {listViewModel.databaseActionManageList(action = action)},
-                // databaseActionManageList = { listViewModel.databaseActionManageList(action = viewState.actionForSnackBar) },
-            )*/
         },
         floatingActionButton = {
             ListFloatingActionButton(onFloatingActionButtonClicked = navigateToTaskScreen)
@@ -141,28 +117,3 @@ fun ListFloatingActionButton(onFloatingActionButtonClicked: (taskId: Int) -> Uni
         )
     }
 }
-
-/*@Composable
-fun DisplaySnackBar(
-    scaffoldState: ScaffoldState,
-    action: Action,
-    message: String
-    // databaseActionManageList: () -> Unit,
-    // taskTitle: String,
-    // onUndoClicked: (Action) -> Unit,
-    // listViewModel: ListViewModel
-) {
-    Log.d("SNACK_BAR_ACTION", "$action")
-    // databaseActionManageList()
-    // val scope = rememberCoroutineScope()
-    LaunchedEffect(key1 = action) {
-        Log.d("SNACK_BAR_ACTION_INSIDE", "$action")
-        if (action != Action.NO_ACTION) {
-            val snackBarResult = scaffoldState.snackbarHostState.showSnackbar(
-                message = message,
-                actionLabel = "Ok"
-            )
-        }
-        // scope.launch {}
-    }
-}*/

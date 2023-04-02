@@ -11,14 +11,15 @@ import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.util.Action
 import com.kay.todopublish.util.RequestState
 import com.kay.todopublish.util.SearchAppBarState
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun ListContent(
@@ -80,6 +81,7 @@ fun DisplayTask(
     onSwipeToDelete: (Action, TaskData) -> Unit,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
+    val scope = rememberCoroutineScope()
     LazyColumn {
         items(
             items = taskFromList,
@@ -87,25 +89,26 @@ fun DisplayTask(
                 task.id
             }
         ) { task ->
-            val dismissState =
-                rememberDismissState() // Remember the dismissState of one of the Item in the list.
-            // val scope = rememberCoroutineScope()
-            // Icon rotation animation
-            LaunchedEffect(dismissState) {
-                val dismissDirection = dismissState.dismissDirection
-                val isDismissed = dismissState.isDismissed(DismissDirection.EndToStart)
-                if (isDismissed && dismissDirection == DismissDirection.EndToStart) {
-                    delay(300)
-                    onSwipeToDelete(Action.DELETE, task)
-
+            val dismissState = rememberDismissState(
+                confirmStateChange = {
+                    when (it) {
+                        DismissValue.DismissedToStart -> {
+                            scope.launch {
+                                delay(300)
+                                onSwipeToDelete(Action.DELETE, task)
+                            }
+                            true
+                        }
+                        else -> false
+                    }
                 }
-                // scope.launch {}
-            }
+            )
             val degrees by animateFloatAsState(
-                if (dismissState.targetValue == DismissValue.Default)
+                if (dismissState.targetValue == DismissValue.Default) {
                     0f
-                else
+                } else {
                     -45f
+                }
             )
             SwipeToDismiss(
                 state = dismissState,
