@@ -2,6 +2,9 @@
     <string name="app_name">ToDoPublish</string>
     <string name="add_button">Add Button</string>
 
+    <!-- Splash Screen -->
+    <string name="to_do_logo">To-Do Logo</string>
+
     <!-- List Screen -->
     <string name="empty_content">No Task Found</string>
 

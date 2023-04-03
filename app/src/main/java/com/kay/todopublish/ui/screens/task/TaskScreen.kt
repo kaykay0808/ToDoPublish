@@ -53,21 +53,8 @@ fun TaskScreen(
                     } else {
                         taskViewModel.manageDatabaseAction(
                             action = action
-                            // navigateToListScreen = navigateToListScreen,
-                            // context = context
                         )
                     }
-                    // taskViewModel.actionManageHandling(action)
-                    /*if (action == Action.NO_ACTION) {
-                        navigateToListScreen(action)
-                    } else {
-                        if (taskViewModel.validateFields()) {
-                            taskViewModel.databaseActionsManage(action)
-                            navigateToListScreen(action)
-                        } else {
-                            taskViewModel.displayToast(context = context)
-                        }
-                    }*/
                 }
             )
         },
