@@ -89,7 +89,6 @@ fun ListScreen(
                 searchAppBarState = viewState.searchAppBarState,
                 onSwipeToDelete = { action, taskData ->
                     listViewModel.deleteSingleTaskFromList(taskData = taskData)
-
                     // listViewModel.updateListField(selectedTask = taskData)
                 },
                 navigateToTaskScreen = navigateToTaskScreen

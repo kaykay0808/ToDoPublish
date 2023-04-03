@@ -1,6 +1,10 @@
 package com.kay.todopublish.ui.screens.list
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,8 +15,12 @@ import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.kay.todopublish.data.models.TaskData
 import com.kay.todopublish.util.Action
@@ -110,19 +118,39 @@ fun DisplayTask(
                     -45f
                 }
             )
-            SwipeToDismiss(
-                state = dismissState,
-                directions = setOf(DismissDirection.EndToStart), // specify the direction to dismiss.
-                dismissThresholds = { FractionalThreshold(fraction = 0.4f) }, // Fraction meaning we dismiss the item after 40% of the item
-                background = { SwipeRedBackground(degrees = degrees) },
-                dismissContent = {
-                    TaskItem(
-                        modifier = Modifier.animateItemPlacement(),
-                        taskData = task,
-                        navigateToTaskScreen = navigateToTaskScreen
+
+            // Animation
+            var itemAppeared by remember { mutableStateOf(false) }
+            LaunchedEffect(key1 = true) {
+                itemAppeared = true
+            }
+            AnimatedVisibility(
+                visible = itemAppeared, // && !isDismissed?
+                enter = expandVertically(
+                    animationSpec = tween(
+                        300
                     )
-                }
-            )
+                ),
+                exit = shrinkVertically(
+                    animationSpec = tween(
+                        300
+                    )
+                )
+            ) {
+                SwipeToDismiss(
+                    state = dismissState,
+                    directions = setOf(DismissDirection.EndToStart), // specify the direction to dismiss.
+                    dismissThresholds = { FractionalThreshold(fraction = 0.4f) }, // Fraction meaning we dismiss the item after 40% of the item
+                    background = { SwipeRedBackground(degrees = degrees) }, // Customize background.
+                    dismissContent = {
+                        TaskItem(
+                            modifier = Modifier.animateItemPlacement(),
+                            taskData = task,
+                            navigateToTaskScreen = navigateToTaskScreen
+                        )
+                    }
+                )
+            }
         }
     }
 }

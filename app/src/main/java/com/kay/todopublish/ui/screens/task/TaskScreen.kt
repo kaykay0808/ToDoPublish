@@ -13,6 +13,7 @@ import com.kay.todopublish.ui.ViewEffects
 import com.kay.todopublish.ui.screens.task.topbar.TaskTopBar
 import com.kay.todopublish.ui.screens.task.viewmodel.TaskViewEffects
 import com.kay.todopublish.ui.screens.task.viewmodel.TaskViewModel
+import com.kay.todopublish.util.Action
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -47,11 +48,15 @@ fun TaskScreen(
             TaskTopBar(
                 selectedTask = taskViewState.selectedTask,
                 navigateToListScreen = { action ->
-                    taskViewModel.manageDatabaseAction(
-                        action = action
-                        // navigateToListScreen = navigateToListScreen,
-                        // context = context
-                    )
+                    if (action == Action.NO_ACTION) {
+                        navigateToListScreen()
+                    } else {
+                        taskViewModel.manageDatabaseAction(
+                            action = action
+                            // navigateToListScreen = navigateToListScreen,
+                            // context = context
+                        )
+                    }
                     // taskViewModel.actionManageHandling(action)
                     /*if (action == Action.NO_ACTION) {
                         navigateToListScreen(action)
