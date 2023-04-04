@@ -5,8 +5,9 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.kay.todopublish.navigation.destinations.listComposable
+import com.kay.todopublish.navigation.destinations.splashComposable
 import com.kay.todopublish.navigation.destinations.taskComposable
-import com.kay.todopublish.util.Constants.LIST_SCREEN
+import com.kay.todopublish.util.Constants.SPLASH_SCREEN
 
 // Settings for our navigation
 @Composable
@@ -22,8 +23,11 @@ fun NavigationSetup(
     // Calling the navHost which define the navigation graph.
     NavHost(
         navController = navController,
-        startDestination = LIST_SCREEN // -> list/{action}
+        startDestination = SPLASH_SCREEN
     ) {
+        splashComposable(
+            navigateToListScreen = screenDestination.splash
+        )
         // Define our composable build (we will create our custom destination instead of define our composable below)
         listComposable(
             navigateToTaskScreen = screenDestination.task
