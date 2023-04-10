@@ -8,7 +8,7 @@ import com.kay.todopublish.util.Constants.SPLASH_SCREEN
 class ScreenController(navController: NavHostController) {
     /** SPLASH SCREEN */
     val splash: () -> Unit = {
-        navController.navigate(route = "list/${Action.NO_ACTION}") {
+        navController.navigate(route = "list/${Action.NO_ACTION.name}") {
             popUpTo(SPLASH_SCREEN) { inclusive = true }
         }
     }

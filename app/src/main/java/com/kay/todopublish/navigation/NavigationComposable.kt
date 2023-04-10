@@ -1,15 +1,17 @@
 package com.kay.todopublish.navigation
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
+import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.kay.todopublish.navigation.destinations.listComposable
 import com.kay.todopublish.navigation.destinations.splashComposable
 import com.kay.todopublish.navigation.destinations.taskComposable
 import com.kay.todopublish.util.Constants.SPLASH_SCREEN
 
 // Settings for our navigation
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun NavigationSetup(
     navController: NavHostController
@@ -21,7 +23,7 @@ fun NavigationSetup(
         ScreenController(navController = navController)
     }
     // Calling the navHost which define the navigation graph.
-    NavHost(
+    AnimatedNavHost(
         navController = navController,
         startDestination = SPLASH_SCREEN
     ) {

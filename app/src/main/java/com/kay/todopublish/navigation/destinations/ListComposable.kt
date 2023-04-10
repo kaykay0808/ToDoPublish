@@ -1,15 +1,17 @@
 package com.kay.todopublish.navigation.destinations
 
 import android.util.Log
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.google.accompanist.navigation.animation.composable
 import com.kay.todopublish.ui.screens.list.ListScreen
 import com.kay.todopublish.util.Constants.LIST_ARGUMENT_KEY
 import com.kay.todopublish.util.Constants.LIST_SCREEN
 import com.kay.todopublish.util.toAction
 
+@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.listComposable(
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {

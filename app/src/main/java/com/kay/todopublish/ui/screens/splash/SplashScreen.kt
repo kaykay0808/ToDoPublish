@@ -54,6 +54,7 @@ fun SplashScreen(
         delay(SPLASH_SCREEN_DELAY)
         navigateToListScreen()
     }
+    // Box is representing the background for our splash screen.
     Box(
         modifier = Modifier
             .fillMaxSize()
