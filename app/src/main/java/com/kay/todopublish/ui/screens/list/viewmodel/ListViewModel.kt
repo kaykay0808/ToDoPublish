@@ -63,6 +63,8 @@ class ListViewModel @Inject constructor(
         }
     }
 
+    // This Init block is replaced with getAllTask() function.
+    // onEach runs everytime taskFlow gets a new value. very similar to .collect 
     init {
         taskFlow.onEach { updatedList ->
             allTask = RequestState.Success(updatedList)
@@ -75,10 +77,6 @@ class ListViewModel @Inject constructor(
             allTask = RequestState.Error(it)
             render()
         }.launchIn(viewModelScope)
-    }
-
-    init {
-        getAllTask()
     }
 
     private fun render() {
@@ -209,10 +207,18 @@ class ListViewModel @Inject constructor(
         }
     }
 
+    fun returningActionToString(action: Action): String {
+        return if (action.name == "DELETE") {
+            "UNDO"
+        } else {
+            "OK"
+        }
+    }
+
     private fun manageActions(updatedList: List<TaskData>) {
-        val actionForSnackBar = if (updatedList.isEmpty()) {
+        val actionForSnackBar = if (updatedList.isEmpty() && currentList.size > 1) {
             Action.DELETE_ALL
-        } else if (currentList.isEmpty()) {
+        } else if (currentList.isEmpty() && updatedList.size > 1) {
             Action.NO_ACTION
         } else if (currentList.size > updatedList.size) {
             Action.DELETE
@@ -223,12 +229,11 @@ class ListViewModel @Inject constructor(
         } else {
             Action.NO_ACTION
         }
-
         viewEffects.send(
             ListViewEffect.ShowSnackBar(
                 action = actionForSnackBar,
                 message = setMessage(actionForSnackBar),
-                actionLabel = returningActionToString(action = actionForSnackBar),
+                actionLabel = returningActionToString(action = actionForSnackBar), // "OK" - "UNDO"
                 onUndoClicked = {
                     addTask()
                 }
@@ -241,14 +246,6 @@ class ListViewModel @Inject constructor(
     fun persistSortState(priority: Priority) {
         viewModelScope.launch(Dispatchers.IO) {
             dataStoreRepository.persistSortState(priority = priority)
-        }
-    }
-
-    fun returningActionToString(action: Action): String {
-        return if (action.name == "DELETE") {
-            "UNDO"
-        } else {
-            "OK"
         }
     }
 }

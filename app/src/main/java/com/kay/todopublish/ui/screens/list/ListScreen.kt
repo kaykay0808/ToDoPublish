@@ -1,6 +1,7 @@
 package com.kay.todopublish.ui.screens.list
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -34,6 +35,7 @@ fun ListScreen(
     ViewEffects(listViewModel.viewEffects) {
         when (it) {
             is ListViewEffect.ShowSnackBar -> if (it.action != Action.NO_ACTION) {
+                Log.d("THE_ACTION","${it.action}")
                 val snackBarResult = scaffoldState.snackbarHostState.showSnackbar(
                     message = it.message,
                     actionLabel = listViewModel.returningActionToString(it.action) // "Ok"
