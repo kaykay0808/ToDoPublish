@@ -32,7 +32,7 @@ class ListViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository /*( ← Inject DataStore Repository )*/
 ) : ViewModel() {
 
-    private var currentList: List<TaskData> = emptyList()
+    private var currentList: List<TaskData>? = null
 
     /** ============ Search Bar State ================= */
     var viewState by mutableStateOf(ListViewState())
@@ -64,7 +64,7 @@ class ListViewModel @Inject constructor(
     }
 
     // This Init block is replaced with getAllTask() function.
-    // onEach runs everytime taskFlow gets a new value. very similar to .collect 
+    // onEach runs everytime taskFlow gets a new value. very similar to .collect
     init {
         taskFlow.onEach { updatedList ->
             allTask = RequestState.Success(updatedList)
@@ -216,19 +216,24 @@ class ListViewModel @Inject constructor(
     }
 
     private fun manageActions(updatedList: List<TaskData>) {
-        val actionForSnackBar = if (updatedList.isEmpty() && currentList.size > 1) {
-            Action.DELETE_ALL
-        } else if (currentList.isEmpty() && updatedList.size > 1) {
-            Action.NO_ACTION
-        } else if (currentList.size > updatedList.size) {
-            Action.DELETE
-        } else if (currentList.size < updatedList.size) {
-            Action.ADD
-        } else if (currentList != updatedList) {
-            Action.UPDATE
-        } else {
-            Action.NO_ACTION
-        }
+        val actionForSnackBar =
+            if (currentList == null) {
+                Action.NO_ACTION
+            } else if (updatedList.isEmpty() && currentList!!.size > 1) { // set action forSnackBar to type of action. -> if updated list is empty and currentList has more then 1 item
+                Action.DELETE_ALL
+            } else if (currentList!!.isEmpty() && updatedList.size == 1) {
+                Action.ADD
+            } else if (currentList!!.isEmpty() && currentList != updatedList) {
+                Action.NO_ACTION
+            } else if (currentList!!.size > updatedList.size) {
+                Action.DELETE
+            } else if (currentList!!.size < updatedList.size) {
+                Action.ADD
+            } else if (currentList != updatedList) {
+                Action.UPDATE
+            } else {
+                Action.NO_ACTION
+            }
         viewEffects.send(
             ListViewEffect.ShowSnackBar(
                 action = actionForSnackBar,
