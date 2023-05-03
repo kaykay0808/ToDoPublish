@@ -216,6 +216,7 @@ class ListViewModel @Inject constructor(
     }
 
     private fun manageActions(updatedList: List<TaskData>) {
+        Log.d("manageAction", "Triggered")
         val actionForSnackBar =
             if (currentList == null) {
                 Action.NO_ACTION

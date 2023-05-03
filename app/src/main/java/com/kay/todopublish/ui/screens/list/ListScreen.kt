@@ -1,7 +1,6 @@
 package com.kay.todopublish.ui.screens.list
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -20,7 +19,6 @@ import com.kay.todopublish.ui.screens.list.viewmodel.ListViewEffect
 import com.kay.todopublish.ui.screens.list.viewmodel.ListViewModel
 import com.kay.todopublish.ui.theme.floatingActionButtonBackgroundColor
 import com.kay.todopublish.util.Action
-import com.kay.todopublish.util.CloseIconState
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -35,7 +33,6 @@ fun ListScreen(
     ViewEffects(listViewModel.viewEffects) {
         when (it) {
             is ListViewEffect.ShowSnackBar -> if (it.action != Action.NO_ACTION) {
-                Log.d("THE_ACTION","${it.action}")
                 val snackBarResult = scaffoldState.snackbarHostState.showSnackbar(
                     message = it.message,
                     actionLabel = listViewModel.returningActionToString(it.action) // "Ok"
@@ -55,7 +52,12 @@ fun ListScreen(
             ListTopBar(
                 onSearchIconClicked = { listViewModel.openSearchBar() },
                 onCloseIconClicked = {
-                    when (viewState.closeIconState) {
+                    if (viewState.searchTextInputState.isNotEmpty()) {
+                        listViewModel.defaultTextInputState()
+                    } else {
+                        listViewModel.closeSearchBar()
+                    }
+                    /*when (viewState.closeIconState) {
                         CloseIconState.READY_TO_EMPTY_FIELD -> {
                             listViewModel.defaultTextInputState() // Empty field
                             listViewModel.readyToCloseSearchBar() // Ready to close SearchBar.
@@ -68,7 +70,7 @@ fun ListScreen(
                                 listViewModel.readyToEmptyField() // set back to READY_TO_EMPTY_FIELD
                             }
                         }
-                    }
+                    }*/
                 },
                 viewState = viewState,
                 onSearchImeClicked = { searchQuery ->
@@ -81,7 +83,8 @@ fun ListScreen(
                 onDeleteAllConfirmed = {
                     listViewModel.deleteAllTask()
                     listViewModel.setActions()
-                }
+                },
+                textSearchInput = viewState.searchTextInputState
             )
         },
         content = {
@@ -91,7 +94,7 @@ fun ListScreen(
                 searchAppBarState = viewState.searchAppBarState,
                 onSwipeToDelete = { action, taskData ->
                     listViewModel.deleteSingleTaskFromList(taskData = taskData)
-                    // listViewModel.updateListField(selectedTask = taskData)
+                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss() // Dismiss the first snackBar if we swipe multiply items.
                 },
                 navigateToTaskScreen = navigateToTaskScreen
             )

@@ -76,8 +76,6 @@ class TaskViewModel @Inject constructor(
                 Action.DELETE -> {
                     deleteSingleTask()
                 }
-                /*Action.DELETE_ALL -> {}
-                Action.UNDO -> {}*/
                 else -> { /* No database operation, just navigate back */
                 }
             }
