@@ -114,8 +114,19 @@ fun SortAction(
             onDismissRequest = { expandedDropDownMenu = false }
         ) {
             // Items are defined under the component package inside the PriorityItem file.
+            Priority.values().slice(setOf(0, 2, 3)).forEach { priority ->
+                DropdownMenuItem(
+                    onClick = {
+                        expandedDropDownMenu = false
+                        onSortIconClicked(priority)
+                    }
+                ) {
+                    // Defining the row item
+                    PriorityItem(priority = priority)
+                }
+            }
             // Item 1
-            DropdownMenuItem(
+            /*DropdownMenuItem(
                 onClick = {
                     expandedDropDownMenu = false
                     onSortIconClicked(Priority.LOW)
@@ -145,7 +156,7 @@ fun SortAction(
             ) {
                 // Defining the row item
                 PriorityItem(priority = Priority.NONE)
-            }
+            }*/
         }
     }
 }

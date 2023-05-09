@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.kay.todopublish.R
 import com.kay.todopublish.ui.theme.LOGO_SIZE
@@ -54,7 +55,33 @@ fun SplashScreen(
         delay(SPLASH_SCREEN_DELAY)
         navigateToListScreen()
     }
+    Splash(
+        offsetState = offsetState,
+        alphaState = alphaState
+    )
     // Box is representing the background for our splash screen.
+    /*Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.splashScreenBackground),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            modifier = Modifier
+                .size(LOGO_SIZE)
+                .offset(y = offsetState)
+                .alpha(alpha = alphaState),
+            painter = painterResource(id = getLogo()),
+            contentDescription = stringResource(id = R.string.to_do_logo)
+        )
+    }*/
+}
+
+@Composable
+fun Splash(
+    offsetState: Dp,
+    alphaState: Float
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -84,8 +111,9 @@ fun getLogo(): Int {
 @Preview
 @Composable
 fun SplashScreenPreview() {
-    SplashScreen(
-        navigateToListScreen = {}
+    Splash(
+        offsetState = 0.dp,
+        alphaState = 1f
     )
 }
 
@@ -93,8 +121,9 @@ fun SplashScreenPreview() {
 @Composable
 fun SplashScreenDarkThemePreview() {
     ToDoPublishTheme(darkTheme = true) {
-        SplashScreen(
-            navigateToListScreen = {}
+        Splash(
+            offsetState = 0.dp,
+            alphaState = 1f
         )
     }
 }
