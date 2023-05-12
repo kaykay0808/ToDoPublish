@@ -1,4 +1,4 @@
-package com.kay.todopublish.components
+package com.kay.todopublish.ui.screens.list.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Row

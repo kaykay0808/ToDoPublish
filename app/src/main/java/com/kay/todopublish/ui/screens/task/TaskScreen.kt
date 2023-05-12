@@ -63,9 +63,9 @@ fun TaskScreen(
                 title = taskViewState.title,
                 description = taskViewState.description,
                 priority = taskViewState.priority,
-                onTitleChange = { taskViewModel.updateTitle(it) },
-                onDescriptionChange = { taskViewModel.updateDescription(it) },
-                onPriorityChange = { taskViewModel.updatePriority(it) }
+                onTitleChange = { taskViewModel.updateTitle(newTitle = it) },
+                onDescriptionChange = { taskViewModel.updateDescription(newDescription = it) },
+                onPriorityChange = { taskViewModel.updatePriority(newPriority = it) }
             )
         }
     )

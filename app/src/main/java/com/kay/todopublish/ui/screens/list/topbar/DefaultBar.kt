@@ -20,9 +20,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.kay.todopublish.R
-import com.kay.todopublish.components.DisplayAlertDialog
-import com.kay.todopublish.components.PriorityItem
 import com.kay.todopublish.data.models.Priority
+import com.kay.todopublish.ui.screens.list.components.DisplayAlertDialog
+import com.kay.todopublish.ui.screens.list.components.PriorityItem
 import com.kay.todopublish.ui.theme.LARGE_PADDING
 import com.kay.todopublish.ui.theme.Typography
 import com.kay.todopublish.ui.theme.topAppBarBackgroundColor

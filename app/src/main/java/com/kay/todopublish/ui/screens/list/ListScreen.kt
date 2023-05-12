@@ -19,6 +19,7 @@ import com.kay.todopublish.ui.screens.list.viewmodel.ListViewEffect
 import com.kay.todopublish.ui.screens.list.viewmodel.ListViewModel
 import com.kay.todopublish.ui.theme.floatingActionButtonBackgroundColor
 import com.kay.todopublish.util.Action
+import com.kay.todopublish.util.SearchAppBarState
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -50,12 +51,20 @@ fun ListScreen(
         scaffoldState = scaffoldState,
         topBar = {
             ListTopBar(
-                onSearchIconClicked = { listViewModel.openSearchBar() },
+                onSearchIconClicked = {
+                    // listViewModel.openSearchBar()
+                    listViewModel.listAppBarState(
+                        newState = SearchAppBarState.OPENED
+                    )
+                },
                 onCloseIconClicked = {
                     if (viewState.searchTextInputState.isNotEmpty()) {
                         listViewModel.defaultTextInputState()
                     } else {
-                        listViewModel.closeSearchBar()
+                        // listViewModel.closeSearchBar()
+                        listViewModel.listAppBarState(
+                            newState = SearchAppBarState.CLOSED
+                        )
                     }
                     /*when (viewState.closeIconState) {
                         CloseIconState.READY_TO_EMPTY_FIELD -> {
@@ -93,6 +102,7 @@ fun ListScreen(
                 searchedTask = viewState.searchTask,
                 searchAppBarState = viewState.searchAppBarState,
                 onSwipeToDelete = { action, taskData ->
+                    listViewModel.updateAction(newAction = action) // todo do we need this line?
                     listViewModel.deleteSingleTaskFromList(taskData = taskData)
                     scaffoldState.snackbarHostState.currentSnackbarData?.dismiss() // Dismiss the first snackBar if we swipe multiply items.
                 },

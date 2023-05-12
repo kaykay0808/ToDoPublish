@@ -1,4 +1,4 @@
-package com.kay.todopublish.components
+package com.kay.todopublish.ui.screens.list.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas

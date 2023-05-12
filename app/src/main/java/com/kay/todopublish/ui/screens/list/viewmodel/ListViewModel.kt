@@ -162,6 +162,11 @@ class ListViewModel @Inject constructor(
     }
 
     /** ------- search app bar states -------*/
+    fun listAppBarState(newState: SearchAppBarState) {
+        searchAppBarState = newState
+        render()
+    }
+
     fun openSearchBar() {
         searchAppBarState = SearchAppBarState.OPENED
         render()
@@ -195,6 +200,11 @@ class ListViewModel @Inject constructor(
     /** ------- SnackBar -------*/
     fun setActions() {
         actionForSnackBar = Action.DELETE_ALL
+        render()
+    }
+
+    fun updateAction(newAction: Action) {
+        actionForSnackBar = newAction
         render()
     }
 

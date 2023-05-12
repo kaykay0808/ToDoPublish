@@ -18,9 +18,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.kay.todopublish.R
-import com.kay.todopublish.components.DisplayAlertDialog
 import com.kay.todopublish.data.models.Priority
 import com.kay.todopublish.data.models.TaskData
+import com.kay.todopublish.ui.screens.list.components.DisplayAlertDialog
 import com.kay.todopublish.ui.theme.topAppBarBackgroundColor
 import com.kay.todopublish.ui.theme.topAppBarContentColor
 import com.kay.todopublish.util.Action

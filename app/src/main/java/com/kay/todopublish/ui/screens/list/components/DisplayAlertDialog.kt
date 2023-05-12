@@ -1,4 +1,4 @@
-package com.kay.todopublish.components
+package com.kay.todopublish.ui.screens.list.components
 
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button

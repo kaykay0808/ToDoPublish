@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.kay.todopublish.R
-import com.kay.todopublish.components.PriorityDropDownMenu
 import com.kay.todopublish.data.models.Priority
+import com.kay.todopublish.ui.screens.list.components.PriorityDropDownMenu
 import com.kay.todopublish.ui.theme.LARGE_PADDING
 import com.kay.todopublish.ui.theme.MEDIUM_PADDING
 
