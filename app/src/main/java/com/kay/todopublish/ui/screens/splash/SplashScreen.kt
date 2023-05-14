@@ -1,38 +1,6 @@
 package com.kay.todopublish.ui.screens.splash
 
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import com.kay.todopublish.R
-import com.kay.todopublish.ui.theme.LOGO_SIZE
-import com.kay.todopublish.ui.theme.ToDoPublishTheme
-import com.kay.todopublish.ui.theme.splashScreenBackground
-import com.kay.todopublish.util.Constants.SPLASH_SCREEN_DELAY
-import kotlinx.coroutines.delay
-
-@Composable
+/*@Composable
 fun SplashScreen(
     navigateToListScreen: () -> Unit
 ) {
@@ -126,4 +94,4 @@ fun SplashScreenDarkThemePreview() {
             alphaState = 1f
         )
     }
-}
+}*/

@@ -7,11 +7,11 @@ import com.kay.todopublish.util.Constants.SPLASH_SCREEN
 // Class which handle our navigation
 class ScreenController(navController: NavHostController) {
     /** SPLASH SCREEN */
-    val splash: () -> Unit = {
+    /*val splash: () -> Unit = {
         navController.navigate(route = "list/${Action.NO_ACTION.name}") {
             popUpTo(SPLASH_SCREEN) { inclusive = true }
         }
-    }
+    }*/
 
     /** LIST-SCREEN TO TASK-SCREEN  (List route?)*/
     val task: (Int) -> Unit = { taskId ->

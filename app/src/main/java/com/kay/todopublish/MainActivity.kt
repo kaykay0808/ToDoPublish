@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.kay.todopublish.navigation.NavigationSetup
@@ -19,6 +20,7 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalAnimationApi::class) // move this outside the class??
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         setContent {
             ToDoPublishTheme {
                 // initiate navController
