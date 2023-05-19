@@ -22,6 +22,14 @@ import javax.inject.Inject
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PREFERENCE_NAME)
 
+/**
+ * I have actually never seen this annotation before, and it works for this app because it is only
+ * used in one ViewModel, but I would have added this to DatabaseModule instead and made it a singleton.
+ * A singleton means that there will only be one instance of the class for the entire app, which is
+ * what you want with a database or persistent storage. If it is scoped to a viewmodel, then every
+ * viewmodel you use it in gets a different version of the class, which can cause exceptions and bugs
+ * if multiple instances of a database are being accessed.
+ */
 // ViewModelScoped is needed to inject this dataStore repository inside our ViewModel
 @ViewModelScoped
 class DataStoreRepository @Inject constructor(

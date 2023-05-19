@@ -1,5 +1,12 @@
 package com.kay.todopublish.util
 
+/**
+ *  A util folder like this should be for things that are shared in multiple places in the app. RequestState
+ *  and Action might fit here, but CloseIconState and SearchAppBarState should be by the app bar. The Constants
+ *  file shouldn't be done like that either, you don't just want an object with a bunch of random constants.
+ *  The correct place to put constants is in a Companion object in the class that uses them. (or in a more
+ *  specific object in the case of navigation routes, for example)
+ */
 enum class Action {
     ADD,
     UPDATE,

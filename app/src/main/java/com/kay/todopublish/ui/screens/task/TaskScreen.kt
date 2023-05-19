@@ -15,6 +15,12 @@ import com.kay.todopublish.ui.screens.task.viewmodel.TaskViewEffects
 import com.kay.todopublish.ui.screens.task.viewmodel.TaskViewModel
 import com.kay.todopublish.util.Action
 
+/**
+ * Don't suppress that warning, you need to use the scaffold padding.
+ * You can pass in a Modifier to your content. So you would use a modifier
+ * on TaskContent to add the scaffold padding, and then use that passed in modifier
+ * on the Column in TaskContent.
+ */
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun TaskScreen(
@@ -29,6 +35,10 @@ fun TaskScreen(
     LaunchedEffect(key1 = taskId) {
         taskViewModel.getSelectedTask(taskId = taskId)
     }
+    /**
+     * This LaunchedEffect should not be here, and this logic and function should be called
+     * as part of getSelectedTask in the viewmodel
+     */
     LaunchedEffect(key1 = selectedTask) {
         if (selectedTask != null || taskId == -1) {
             taskViewModel.updateTaskField(selectedTask = selectedTask)

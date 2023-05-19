@@ -63,6 +63,11 @@ fun TaskItem(
                         .weight(1f),
                     contentAlignment = Alignment.TopEnd
                 ) {
+                    /**
+                     * I have noticed you drawing circles this way a lot. I would personally use a Box
+                     * composable instead of a Canvas, but this is fine. However, I would extract it out
+                     * into a component so you could just call Circle(color, size).
+                     */
                     Canvas(
                         modifier = Modifier
                             .size(PRIORITY_INDICATOR_SIZE)

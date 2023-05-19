@@ -16,6 +16,12 @@ fun NavigationSetup(
     navController: NavHostController
     // toDoViewModel: ToDoViewModel
 ) {
+    /**
+     * I mentioned this before, but this is a bit weird to see, so just make sure
+     * you understand why you are using a class to hold functions like this. I find it
+     * a bit confusing and would prefer to just have the functions defined in the
+     * navigation composable (look at onNavigateToFriends here https://developer.android.com/jetpack/compose/navigation#nav-from-composable)
+     */
     // save our backstack
     // The variable just keep track of all our composable
     val screenDestination = remember(navController) {

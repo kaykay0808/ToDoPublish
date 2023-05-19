@@ -8,6 +8,11 @@ import javax.inject.Inject
 
 @ViewModelScoped
 class ToDoRepository @Inject constructor(private val toDoDao: ToDoDao) {
+    /**
+     * Just a general naming comment, but if you are returning or deleting a list of things, it is
+     * a good idea to name the variable plural. So instead of getAllTask, it would be getAllTasks.
+     * This is something I noticed in a few places in the app but I will only comment on it here.
+     */
     // access all functions from Dao
     val getAllTask: Flow<List<TaskData>> = toDoDao.getAllTask()
     val sortByLowPriority: Flow<List<TaskData>> = toDoDao.sortByLowPriority()

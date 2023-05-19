@@ -29,6 +29,17 @@ import com.kay.todopublish.util.SearchAppBarState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+/**
+ * This is a high-level and complicated comment, but you really want to "unwrap"
+ * your lists in the viewmodel. The composable shouldn't have to handle RequestState,
+ * it should just either display data or not display data. So this pattern here is a bit
+ * jumbled up. HandleListContent state is a weird name and seems to do the same thing
+ * as the else block...
+ *
+ * If it was me, I would just have a single list of tasks that get to this composable,
+ * and one check for if it is empty or not. Figure out which list of tasks to pass in before
+ * you call it.
+ */
 @Composable
 fun ListContent(
     allTask: RequestState<List<TaskData>>,
@@ -121,6 +132,12 @@ fun DisplayTask(
 
             // Animation
             var itemAppeared by remember { mutableStateOf(false) }
+            /**
+             * I don't think this animation actually works. LazyColumns do not have item add animations yet,
+             * and I am pretty sure the visibility change never happens with this code either. But good try! haha.
+             * The exit animation also never gets triggered because you don't set itemAppeared after swiping.
+             * Also, if you want a LaunchedEffect to run only once, the convention is to use LaunchedEffect(Unit)
+             */
             LaunchedEffect(key1 = true) {
                 itemAppeared = true
             }

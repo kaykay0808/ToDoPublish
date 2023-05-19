@@ -7,6 +7,9 @@ import com.kay.todopublish.util.SearchAppBarState
 
 @Composable
 fun ListTopBar(
+    /**
+     * Dont pass the entire list state to a component, just pass what you need
+     */
     viewState: ListViewState,
     onSearchIconClicked: () -> Unit,
     onSortIconClicked: (Priority) -> Unit,

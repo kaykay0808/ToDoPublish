@@ -92,6 +92,9 @@ class ListViewModel @Inject constructor(
 
     val viewEffects = ViewEffects<ListViewEffect>()
 
+    /**
+     * Remove this function and the comment about it above the init block to avoid confusion
+     */
     private fun getAllTask() {
         allTask = RequestState.Loading
         render()

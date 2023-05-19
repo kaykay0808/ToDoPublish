@@ -14,7 +14,6 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -82,18 +81,18 @@ fun PriorityDropDownMenu(
             text = priority.name,
             style = MaterialTheme.typography.subtitle2
         )
-        IconButton(
+        /**
+         * Since your whole item is clickable,, this should just be an icon and not
+         * a button. This way you have one less
+         */
+        Icon(
             modifier = Modifier
                 .alpha(ContentAlpha.medium)
                 .rotate(degrees = angle)
                 .weight(weight = 1f),
-            onClick = { menuExpanded = true }
-        ) {
-            Icon(
-                imageVector = Icons.Filled.ArrowDropDown,
-                contentDescription = stringResource(id = R.string.drop_down_arrow)
-            )
-        }
+            imageVector = Icons.Filled.ArrowDropDown,
+            contentDescription = stringResource(id = R.string.drop_down_arrow)
+        )
         DropdownMenu(
             modifier = Modifier
                 .width(with(LocalDensity.current) { parentSize.width.toDp() }), // Fraction reduce the dropdown menusWidth so it match the padding.

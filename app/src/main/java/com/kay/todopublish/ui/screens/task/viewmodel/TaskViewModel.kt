@@ -113,6 +113,11 @@ class TaskViewModel @Inject constructor(
                 priority = priority
             )
             repository.addTask(taskData = taskData)
+            /**
+             * You do not need to call render in places like this where you
+             * are leaving the screen. You only call this function when you have updated a
+             * state
+             */
             render()
         }
     }
