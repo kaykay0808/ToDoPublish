@@ -10,8 +10,6 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.kay.todopublish.data.models.Priority
 import com.kay.todopublish.util.Constants.PREFERENCE_KEY
 import com.kay.todopublish.util.Constants.PREFERENCE_NAME
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -23,10 +21,11 @@ import javax.inject.Inject
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PREFERENCE_NAME)
 
 // ViewModelScoped is needed to inject this dataStore repository inside our ViewModel
-@ViewModelScoped
+// @ViewModelScoped
 class DataStoreRepository @Inject constructor(
     // Need context in dataStore Repository
-    @ApplicationContext private val context: Context
+    /*@ApplicationContext*/
+    private val context: Context
 ) {
     // Specify the key for our sortState using our constant value
     private object PreferenceKeys {

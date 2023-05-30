@@ -9,7 +9,7 @@ import javax.inject.Inject
 @ViewModelScoped
 class ToDoRepository @Inject constructor(private val toDoDao: ToDoDao) {
     // access all functions from Dao
-    val getAllTask: Flow<List<TaskData>> = toDoDao.getAllTask()
+    val getAllTasks: Flow<List<TaskData>> = toDoDao.getAllTasks()
     val sortByLowPriority: Flow<List<TaskData>> = toDoDao.sortByLowPriority()
     val sortByHighPriority: Flow<List<TaskData>> = toDoDao.sortByHighPriority()
 
@@ -30,7 +30,7 @@ class ToDoRepository @Inject constructor(private val toDoDao: ToDoDao) {
     }
 
     suspend fun deleteAllTask() {
-        toDoDao.deleteAllTask()
+        toDoDao.deleteAllTasks()
     }
 
     fun searchDatabase(searchQuery: String): Flow<List<TaskData>> {

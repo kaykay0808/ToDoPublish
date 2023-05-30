@@ -51,7 +51,7 @@ class ListViewModel @Inject constructor(
     // Reading our priorities order.
     private val taskFlow = combine(
         dataStoreRepository.readSortState.map { Priority.valueOf(it) },
-        repository.getAllTask,
+        repository.getAllTasks,
         repository.sortByHighPriority,
         repository.sortByLowPriority
     ) { priority, allTask, sortByHighPriority, sortByLowPriority ->
@@ -97,7 +97,7 @@ class ListViewModel @Inject constructor(
         render()
         try {
             viewModelScope.launch {
-                repository.getAllTask.collect { updatedList ->
+                repository.getAllTasks.collect { updatedList ->
                     allTask = RequestState.Success(updatedList)
                     // Listening updating.
                     manageActions(updatedList)

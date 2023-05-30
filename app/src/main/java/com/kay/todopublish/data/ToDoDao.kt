@@ -19,7 +19,7 @@ interface ToDoDao {
 
     // Reading all Data
     @Query("SELECT * FROM todo_table ORDER BY id ASC")
-    fun getAllTask(): Flow<List<TaskData>>
+    fun getAllTasks(): Flow<List<TaskData>>
 
     @Query("SELECT * FROM todo_table WHERE id=:taskId")
     fun getSelectedTask(taskId: Int): Flow<TaskData>
@@ -31,7 +31,7 @@ interface ToDoDao {
     suspend fun deleteTask(taskData: TaskData)
 
     @Query("DELETE FROM todo_table")
-    suspend fun deleteAllTask()
+    suspend fun deleteAllTasks()
 
     // Search Title and description
     @Query("SELECT * FROM todo_table WHERE title LIKE :searchQuery OR description LIKE :searchQuery")
