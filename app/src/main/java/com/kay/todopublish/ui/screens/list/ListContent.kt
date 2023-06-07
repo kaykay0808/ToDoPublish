@@ -38,11 +38,12 @@ fun ListContent(
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
     // Logic that decide if we are going to display "searched task" or "all task"
+    // Todo: 1 -> unwrap list in the viewModel (The composable shouldn't have to handle RequestState, it should just either display data or not display data.)
     /**---------- Searched Task Shown ----------*/
     if (searchAppBarState == SearchAppBarState.TRIGGERED) { /* <- Set searchAppBarState to triggered in viewModel */
-        if (searchedTask is RequestState.Success) {
+        if (allTask is RequestState.Success) {
             HandleListContentState(
-                taskFromList = searchedTask.data,
+                taskFromList = allTask.data,
                 onSwipeToDelete = onSwipeToDelete,
                 navigateToTaskScreen = navigateToTaskScreen
             )

@@ -42,7 +42,7 @@ class ListViewModel @Inject constructor(
     private var searchTextInputState = ""
     private var closeIconState = CloseIconState.READY_TO_EMPTY_FIELD
     private var allTask: RequestState<List<TaskData>> = RequestState.Idle
-    private var searchTask: RequestState<List<TaskData>> = RequestState.Idle
+    // private var searchTask: RequestState<List<TaskData>> = RequestState.Idle
     private var actionForSnackBar = Action.NO_ACTION
 
     // SingleTask
@@ -85,7 +85,7 @@ class ListViewModel @Inject constructor(
             searchTextInputState = searchTextInputState,
             closeIconState = closeIconState,
             allTask = allTask,
-            searchTask = searchTask,
+            // searchTask = searchTask,
             actionForSnackBar = actionForSnackBar
         )
     }
@@ -143,18 +143,18 @@ class ListViewModel @Inject constructor(
     }
 
     fun searchDatabase(searchQuery: String) {
-        searchTask = RequestState.Loading
+        allTask = RequestState.Loading
         render()
         try {
             viewModelScope.launch {
                 repository.searchDatabase(searchQuery = "%$searchQuery%") // Need to pass pass the value between %% symbols
                     .collect { searchTaskTyped ->
-                        searchTask = RequestState.Success(searchTaskTyped)
+                        allTask = RequestState.Success(searchTaskTyped)
                         render()
                     }
             }
         } catch (e: Exception) {
-            searchTask = RequestState.Error(e)
+            allTask = RequestState.Error(e)
             render()
         }
         searchAppBarState = SearchAppBarState.TRIGGERED

@@ -99,7 +99,7 @@ fun ListScreen(
         content = {
             ListContent(
                 allTask = allTask,
-                searchedTask = viewState.searchTask,
+                searchedTask = viewState.allTask,
                 searchAppBarState = viewState.searchAppBarState,
                 onSwipeToDelete = { action, taskData ->
                     listViewModel.updateAction(newAction = action) // todo do we need this line?
