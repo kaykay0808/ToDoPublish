@@ -16,11 +16,12 @@ fun NavigationSetup(
     navController: NavHostController
 ) {
     // Calling the navHost which define the navigation graph.
-    /** NavGraph */
+    /** NavHost */
     AnimatedNavHost(
         navController = navController,
         startDestination = LIST_SCREEN
     ) {
+        /** NavGraph */
         // Define our composable build (we will create our custom destination instead of define our composable below)
         listComposable(
             navigateToTaskScreen = { taskId ->
