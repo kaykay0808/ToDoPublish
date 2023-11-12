@@ -3,7 +3,7 @@ package com.kay.todopublish.navigation
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import com.google.accompanist.navigation.animation.AnimatedNavHost
+import androidx.navigation.compose.NavHost
 import com.kay.todopublish.navigation.destinations.listComposable
 import com.kay.todopublish.navigation.destinations.taskComposable
 import com.kay.todopublish.util.Constants.LIST_SCREEN
@@ -17,7 +17,7 @@ fun NavigationSetup(
 ) {
     // Calling the navHost which define the navigation graph.
     /** NavHost */
-    AnimatedNavHost(
+    NavHost(
         navController = navController,
         startDestination = LIST_SCREEN
     ) {
