@@ -117,7 +117,7 @@ fun DisplayTask(
                     0f
                 } else {
                     -45f
-                }
+                }, label = ""
             )
 
             // Animation
